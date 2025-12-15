@@ -1,0 +1,66 @@
+<%args>
+$schema
+$phenotype_files => undef
+$breeding_programs => undef
+$locations => undef
+$preferred_species => undef
+$editable_stock_props => {}
+</%args>
+
+
+<div style="text-align: center">
+    <h1 style="text-align: center">Best Future Forests</h1>
+    <p style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold)">Advanced Forest Genomics and Integrative Resource Management System</p>
+</div>
+
+<!-- <div class="row">
+  <div class="col-sm-4" style="text-align: center">
+    <img src="/img/BFF-AFIRMS_logo_HiRes.png" style="max-width: 400px; width: 100%; margin-bottom: var(--padding-xl)">
+  </div>
+  <div class="col-sm-8">
+    <p style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold)">Best Future Forests: Advanced Forest Genomics and Integrative Resource Management System (BFF-AFIRMS)</p>
+    <p>BFF-AFIRMS is a transformative initiative aimed at digitalizing forest resource management and tree improvement in Alberta, Canada.</p>
+    <p>The project seeks to integrate high-throughput genotyping, predictive analytics, and decision-making science to ensure responsible stewardship of forest genetic resources in the face of climate challenges, and the growing demand for sustainable forest ecosystems and products.</p>
+    <p>BFF-AFIRMS is a joint effort across the Government of Alberta (GoA), forest industry partners of Tree Improvement of Alberta, University of Alberta (UofA, CA), and Oklahoma State University (USA).</p>
+  </div>
+</div> -->
+
+<& homepage/carousel.mas &>
+
+<div>
+      
+	<h3>What is Best Future Forests?</h3>
+
+    <p>A transformative initiative aimed at digitalizing forest resource management and tree improvement in Alberta, Canada.</p>
+    <p>The project seeks to integrate high-throughput genotyping, predictive analytics, and decision-making science to ensure responsible stewardship of forest genetic resources in the face of climate challenges, and the growing demand for sustainable forest ecosystems and products.</p>
+    <p>This is a joint effort across the Government of Alberta (GoA), forest industry partners of Tree Improvement of Alberta, University of Alberta (UofA, CA), and Oklahoma State University (USA).</p>
+
+	<h3>How can I use the database?</h3>
+
+  Best Future Forests is a comprehensive breeding management and analysis software, that only requires a browser.
+  It can be used to design field layouts, collect phenotypic information using tablets, support the collection of genotyping
+  samples in a field, store large amounts of high density genotypic information, and provide Genomic Selection related analyses
+  and predictions. Best Future Forests supports the <a href="https://brapi.org/specification">BrAPI</a> standard.
+
+  <h3>How can I learn more?</h3>
+
+  See the <a href="/about">About</a> page for more information including tutorials and manuals.
+</div>
+  
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+    </div>
+      
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        
+      </div>
+      
+  </div>
+</div>
+
+% if ($phenotype_files) {
+     <& homepage/phenotype_uploads.mas, phenotype_files=>$phenotype_files &>
+% }
+
+<!-- & homepage/github_pullrequests.mas &  -->
