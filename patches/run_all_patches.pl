@@ -9,6 +9,7 @@ Usage: ./run_all_patches.pl -u <dbuser> -p <dbpassword> -h <dbhost> -d <dbname> 
 -t, --test          Do not make permanent changes.      
 
 e.g. `./run_all_patches.pl -u postgres -p postgres -h localhost -d fixture -e janedoe -s 00085 -t`
+e.g. `./run_all_patches.pl -e admin -s 150`
 
 =cut
 
