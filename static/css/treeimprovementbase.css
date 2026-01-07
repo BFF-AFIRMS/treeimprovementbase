@@ -722,7 +722,7 @@ Table
 
 .table.dataTable {
     overflow: auto;
-    /*display: flow;*/
+    display: flow;
 }
 
 .table-flow-scroll {
