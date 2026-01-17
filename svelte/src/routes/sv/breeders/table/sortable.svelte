@@ -1,0 +1,13 @@
+<script lang="ts">
+  import type { ComponentProps } from "svelte";
+  import ArrowUpDownIcon from "@lucide/svelte/icons/arrow-up-down";
+  import { Button } from "$lib/components/ui/button/index.js";
+
+  let { variant = "ghost", name = "test", ...restProps }: ComponentProps<typeof Button> = $props();
+</script>
+<div class="text-center">
+<Button {variant} {...restProps}>
+  {name}
+  <ArrowUpDownIcon class="ml-2" />
+</Button>
+</div>
