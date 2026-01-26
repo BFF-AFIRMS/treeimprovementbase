@@ -15,7 +15,7 @@
           </div>
 
           <div class="col-sm-4" style="text-align:center">
-              <a href="https://www.ualberta.ca"><img src="/static/img/UofA_logo.png" width="200" style="margin-top: var(--padding-lg); margin-bottom: var(--padding-lg);"></a>
+              <a href="https://www.ualberta.ca"><img src="/img/UofA_logo.png" width="200" style="margin-top: var(--padding-lg); margin-bottom: var(--padding-lg);"></a>
           </div>
 
           <div class="col-sm-4" style="text-align:center; margin-top: 0px">
