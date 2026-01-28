@@ -287,7 +287,7 @@ sub auto : Private {
         } else {
             # If not logged in, redirect to login page
             my $request_uri = $c->request->env->{REQUEST_URI};
-            my @allowed_routes = ("/user/login", "/ajax/user/login", "/authenticate/check/token", "/authenticate/caddy", "/oauth");
+            my @allowed_routes = ("/user/login", "/ajax/user/login", "/authenticate/check/token", "/authenticate/keycloak", "/authenticate/google");
 
             my $allowed = 0;
             foreach my $route (@allowed_routes) {

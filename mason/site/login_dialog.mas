@@ -9,6 +9,7 @@ $goto_url => '/'
 
 <%init>
     my $join_breeding_programs = eval{ $c->get_conf('user_registration_join_breeding_programs') };
+    my $main_production_site_url = $c->get_conf('main_production_site_url');
 </%init>
 
 <div class="modal fade" id="site_login_dialog" name="site_login_dialog" tabindex="-1" role="dialog" aria-labelledby="site_login_dialog_title">
@@ -52,12 +53,22 @@ $goto_url => '/'
 
                         <input type="hidden" value="<% $goto_url %>" id="goto_url" name="goto_url" />
 
-                        <div>
-                            <button class="btn btn-default" id="new_user_modal_show" style="float:left" tabindex="6">New User</button>
-                            <button class="btn btn-primary" id="submit_password" name="submit_password" type="submit" style="float:right" tabindex="3">Login</button>
+                        <div style="display: grid">
+                            <button class="btn btn-default" id="new_user_modal_show" style="margin-bottom: 10px" tabindex="6">New User</button>
+                            <button class="btn btn-primary" id="submit_password" name="submit_password" type="submit"tabindex="3">Login</button>
                         </div>
                     </div>
                 </form>
+                <div class="container-fluid" style="display: grid">
+                    <button style="margin-top: 10px" class="btn btn-default button-keycloak" id="login_with_keycloak" name="login_with_keycloak" onclick="location.href = '/authenticate/keycloak/start';">
+                        <img style="width:20px" src="/documents/img/Keycloak_logo.png"/>
+                        Keycloak
+                    </button>
+                    <button style="margin-top: 10px" class="btn btn-default button-google" id="login_with_google" name="login_with_google" onclick="location.href = '/authenticate/google/start';">
+                        <img style="width:20px" src="/documents/img/Google_logo.png"/>
+                        Google
+                    </button>                    
+                </div>          
             </div>
             <div class="modal-footer">
 %  if (!$c->config->{require_login}) {

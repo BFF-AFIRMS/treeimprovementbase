@@ -352,6 +352,24 @@ button[data-dismiss]:hover {
     margin-left: 0px;
 }
 
+.button-keycloak {
+    background-color: #737373;
+    color: white;
+}
+.button-keycloak:hover {
+    background:       linear-gradient( to bottom right, #737373, #252525 );
+    color:            var(--text-color-light);
+}
+
+.button-google {
+    background-color: #efefef
+}
+
+.button-google:hover {
+    background:       linear-gradient( to bottom right, #efefef, #b9b8b8 );
+}
+
+
 /*
 -------------------------------------------------------------------------------
 Dropdown Menu
