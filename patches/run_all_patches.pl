@@ -6,7 +6,7 @@ Usage: ./run_all_patches.pl -u <dbuser> -p <dbpassword> -h <dbhost> -d <dbname> 
 
 -e, --editinguser=  user to write as patch executor
 -s, --startfrom=0   start patches from folder # (Default: 0)
--t, --test          Do not make permanent changes.      
+-t, --test          Do not make permanent changes.
 
 e.g. `./run_all_patches.pl -u postgres -p postgres -h localhost -d fixture -e janedoe -s 00085 -t`
 e.g. `./run_all_patches.pl -e admin -s 150`

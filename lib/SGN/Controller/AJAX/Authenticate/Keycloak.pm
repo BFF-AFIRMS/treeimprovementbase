@@ -8,7 +8,7 @@ use Digest::SHA qw(sha256);
 use HTTP::Request;
 use MIME::Base64::URLSafe;
 use LWP::UserAgent;
-use JSON::XS qw(decode_json encode_json); 
+use JSON::XS qw(decode_json encode_json);
 use URI qw( );
 use Try::Tiny;
 use Data::Dumper;
@@ -82,7 +82,7 @@ sub start : Path('/authenticate/keycloak/start') {
         httponly => 1,
         secure   => 1,
         expires  => '+5m',
-    };    
+    };
 
     # Generate the authorization url
     my $params = {
@@ -103,8 +103,8 @@ sub start : Path('/authenticate/keycloak/start') {
 
 =head2 callback
 
-After a successful authentication in the keycloak login page, redirects the 
-user back to this url, with the temporary authorization code available to 
+After a successful authentication in the keycloak login page, redirects the
+user back to this url, with the temporary authorization code available to
 exchange for a full access token.
 
 =cut
@@ -122,28 +122,28 @@ sub callback : Path('/authenticate/keycloak/callback') {
     my $client_id        = $keycloak->{client_id};
     my $client_secret    = $keycloak->{client_secret};
 
-    my $site_url = $c->get_conf('main_production_site_url');    
+    my $site_url = $c->get_conf('main_production_site_url');
 
     my $status;
     my %result;
 
     # -------------------------------------------------------------------------
     # Error handling and verification
-    
+
     my $error = $c->req->param("error");
     my $error_description = "";
 
     if ($error) {
         %result = (error=>"$error: $error_description");
         $c->stash->{rest} = \%result;
-        return 
+        return
     }
 
     my $iss = $c->req->param("iss");
     if ($iss ne $provider) {
         %result = (error=>"issuer does not match the provider");
         $c->stash->{rest} = \%result;
-        return         
+        return
     }
 
     my $code_verifier = $c->request->cookies->{keycloak_code_verifier};
@@ -174,7 +174,7 @@ sub callback : Path('/authenticate/keycloak/callback') {
     # -------------------------------------------------------------------------
     # Exchange authorization code for access token
 
-    my $ua = LWP::UserAgent->new();    
+    my $ua = LWP::UserAgent->new();
     my $token_url = URI->new("$provider_backend/protocol/openid-connect/token");
     my %form;
     $form{'grant_type'}    = 'authorization_code';
@@ -284,7 +284,7 @@ sub callback : Path('/authenticate/keycloak/callback') {
         # $c->stash->{rest} = { message => "Account was created with username \"$username\"."};
 
     }
-    
+
     if ( $num_rows > 1 ) {
         push @fail, "Duplicate entries found for contact email $email";
         $c->stash->{rest} = { error => "Account creation failed for the following reason(s): ".(join ", ", @fail) };
@@ -296,7 +296,7 @@ sub callback : Path('/authenticate/keycloak/callback') {
 
     $login_info->{user_prefs} = $user_prefs;
     my $new_cookie_string = String::Random->new()->randpattern("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
-    print STDERR "cookie: $new_cookie_string\n"; 
+    print STDERR "cookie: $new_cookie_string\n";
 
     # Complete login
     my $sth = $login->get_sql("login");

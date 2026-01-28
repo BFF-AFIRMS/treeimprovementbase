@@ -67,8 +67,8 @@ $goto_url => '/'
                     <button style="margin-top: 10px" class="btn btn-default button-google" id="login_with_google" name="login_with_google" onclick="location.href = '/authenticate/google/start';">
                         <img style="width:20px" src="/documents/img/Google_logo.png"/>
                         Google
-                    </button>                    
-                </div>          
+                    </button>
+                </div>
             </div>
             <div class="modal-footer">
 %  if (!$c->config->{require_login}) {
@@ -173,7 +173,7 @@ $goto_url => '/'
 </div>
 
 <script>
-jQuery(document).ready( function() { 
+jQuery(document).ready( function() {
 
     jQuery("#site_login_dialog").on('shown.bs.modal', function() {
         jQuery('#show_password').prop('checked', false);
@@ -194,7 +194,7 @@ jQuery(document).ready( function() {
             error: function(r) { alert('An error occurred! Sorry!');  },
             success: function(r) {
                 if (r.error) { alert(r.error); }
-                else { 
+                else {
                     alert(r.message);
                     jQuery('#site_login_forgot_username_dialog').modal('hide');
                 }
@@ -216,7 +216,7 @@ jQuery(document).ready( function() {
             error: function(r) { alert('An error occurred! Sorry!');  },
             success: function(r) {
                 if (r.error) { alert(r.error); }
-                else { 
+                else {
                     alert(r.message);
                     jQuery('#site_login_reset_password_dialog').modal('hide');
                 }
@@ -249,25 +249,25 @@ jQuery(document).ready( function() {
             event.preventDefault();
         }
     });
-    jQuery('#login_form').submit( function(event) { 
+    jQuery('#login_form').submit( function(event) {
         event.preventDefault();
         var form_data = jQuery('#login_form').serialize();
-        if (!jQuery('#username').val() || !jQuery('#password').val()) { 
+        if (!jQuery('#username').val() || !jQuery('#password').val()) {
             alert('Please enter a username and password');
             return;
         }
-        jQuery.ajax( { 
+        jQuery.ajax( {
             url: '/ajax/user/login',
             data: form_data,
             error: function(r) { alert('An error occurred! Sorry!');  },
             success: function(r) {
-                if (r.error) { 
+                if (r.error) {
                     alert(r.error);
                     return;
                 }
                 if (r.goto_url.match('login')) {
                     location.href='/';
-                } else if (r.goto_url && r.goto_url !== "" ) { 
+                } else if (r.goto_url && r.goto_url !== "" ) {
                     location.href=r.goto_url;
                 } else {
                     location.href='/';

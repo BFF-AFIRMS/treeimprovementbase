@@ -9,7 +9,7 @@ use HTTP::Request;
 use MIME::Base64 qw(decode_base64);
 use MIME::Base64::URLSafe;
 use LWP::UserAgent;
-use JSON::XS qw(decode_json encode_json); 
+use JSON::XS qw(decode_json encode_json);
 use URI qw( );
 use Try::Tiny;
 use Data::Dumper;
@@ -54,7 +54,7 @@ sub start : Path('/authenticate/google/start') {
 
     my $gen = String::Random->new;
     my $nonce_verifier = urlsafe_b64encode($gen->randpattern("ssssssssssssssssssssssssssssssssssssssss"));
-	my $nonce = urlsafe_b64encode(sha256($nonce_verifier));	
+	my $nonce = urlsafe_b64encode(sha256($nonce_verifier));
 
     # Save the original code verifiers as cookies, so we can look it up on the callback endpoint
 	# TBD: Figure out the SameSite setting
@@ -76,7 +76,7 @@ sub start : Path('/authenticate/google/start') {
         httponly => 1,
         secure   => 1,
         expires  => '+5m',
-    };	
+    };
 
     # Generate the authorization url
     my $params = {
@@ -96,8 +96,8 @@ sub start : Path('/authenticate/google/start') {
 
 =head2 callback
 
-After a successful authentication in the google login page, redirects the 
-user back to this url, with the temporary authorization code available to 
+After a successful authentication in the google login page, redirects the
+user back to this url, with the temporary authorization code available to
 exchange for a full access token.
 
 =cut
@@ -112,7 +112,7 @@ sub callback : Path('/authenticate/google/callback') {
     my $client_id        = $google->{client_id};
     my $client_secret    = $google->{client_secret};
 
-    my $site_url = $c->get_conf('main_production_site_url');    
+    my $site_url = $c->get_conf('main_production_site_url');
 
     my $status;
     my %result;
@@ -126,7 +126,7 @@ sub callback : Path('/authenticate/google/callback') {
     if ($error) {
         %result = (error=>"$error: $error_description");
         $c->stash->{rest} = \%result;
-        return 
+        return
     }
 
     my $state_verifier = $c->request->cookies->{google_state_verifier};
@@ -148,7 +148,7 @@ sub callback : Path('/authenticate/google/callback') {
 
 	# -------------------------------------------------------------------------
     # Exchange authorization code for access token
- 
+
     my $token_url = URI->new("https://oauth2.googleapis.com/token");
     my %form;
     $form{'grant_type'}    = 'authorization_code';
@@ -175,7 +175,7 @@ sub callback : Path('/authenticate/google/callback') {
 
 	# TBD: Check email verification
 	print STDERR "data: " . Dumper($data) . "\n";
-	
+
 
 # Log the user in
     my $login = CXGN::Login->new($c->dbc->dbh());
@@ -199,7 +199,7 @@ sub callback : Path('/authenticate/google/callback') {
         $c->stash->{rest} = { error => "Login failed for the following reason(s): ".(join ", ", @fail) };
         return;
     }
-    
+
     if ( $num_rows > 1 ) {
         push @fail, "Duplicate entries found for contact email $email";
         $c->stash->{rest} = { error => "Account creation failed for the following reason(s): ".(join ", ", @fail) };
@@ -211,7 +211,7 @@ sub callback : Path('/authenticate/google/callback') {
 
     $login_info->{user_prefs} = $user_prefs;
     my $new_cookie_string = String::Random->new()->randpattern("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
-    print STDERR "cookie: $new_cookie_string\n"; 
+    print STDERR "cookie: $new_cookie_string\n";
 
     # Complete login
     my $sth = $login->get_sql("login");

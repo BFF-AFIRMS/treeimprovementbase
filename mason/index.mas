@@ -28,7 +28,7 @@ $editable_stock_props => {}
 <& homepage/carousel.mas &>
 
 <div>
-      
+
 	<h3>What is Best Future Forests?</h3>
 
     <p>A transformative initiative aimed at digitalizing forest resource management and tree improvement in Alberta, Canada.</p>
@@ -46,16 +46,16 @@ $editable_stock_props => {}
 
   See the <a href="/about">About</a> page for more information including tutorials and manuals.
 </div>
-  
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-6 col-md-6 col-lg-6">
     </div>
-      
+
       <div class="col-sm-6 col-md-6 col-lg-6">
-        
+
       </div>
-      
+
   </div>
 </div>
 

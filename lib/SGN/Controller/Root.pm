@@ -49,7 +49,7 @@ sub index :Path :Args(0) {
     if ($c->user) {
 	($role) = $c->user()->roles(); # get the highest role
     }
-    
+
     if ($c->config->{homepage_display_phenotype_uploads}){
         my @file_array;
         my %file_info;
@@ -111,10 +111,10 @@ sub index :Path :Args(0) {
 	$c->stash->{template} = '/index_logged_in_user.mas';
 	$c->stash->{role} = $role;
     }
-    else { 
+    else {
 	$c->stash->{template} = '/index.mas';
     }
- 
+
 }
 
 =head2 default
