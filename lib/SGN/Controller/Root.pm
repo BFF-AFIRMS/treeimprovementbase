@@ -252,20 +252,22 @@ sub auto : Private {
     #
     unless( $c->config->{'disable_login'} ) {
         my $dbh = $c->dbc->dbh;
+
+        print STDERR "Root has_session: " . CXGN::Login->new( $dbh )->has_session. "\n";
         if ( my $sp_person_id = CXGN::Login->new( $dbh )->has_session ) {
             #For audit system
             $dbh->do("CREATE temporary table IF NOT EXISTS logged_in_user (sp_person_id bigint)");
 
-	    my $already_there_q = "SELECT sp_person_id FROM logged_in_user where sp_person_id=?";
-	    my $already_there_h = $dbh->prepare($already_there_q);
-	    $already_there_h->execute($sp_person_id);
-	    my ($already_there) = $already_there_h->fetchrow_array();
-	    if (!$already_there) {
-		print STDERR "inserting $sp_person_id\n";
-		my $insert_query = "INSERT INTO logged_in_user (sp_person_id) VALUES (?)";
-		my $insert_handle = $dbh->prepare($insert_query);
-		$insert_handle->execute($sp_person_id);
-	    }
+            my $already_there_q = "SELECT sp_person_id FROM logged_in_user where sp_person_id=?";
+            my $already_there_h = $dbh->prepare($already_there_q);
+            $already_there_h->execute($sp_person_id);
+            my ($already_there) = $already_there_h->fetchrow_array();
+            if (!$already_there) {
+                print STDERR "inserting $sp_person_id\n";
+                my $insert_query = "INSERT INTO logged_in_user (sp_person_id) VALUES (?)";
+                my $insert_handle = $dbh->prepare($insert_query);
+                $insert_handle->execute($sp_person_id);
+            }
             my $count_q = "select count(*) from logged_in_user";
             my $count_h = $dbh -> prepare($count_q);
             $count_h -> execute();
@@ -284,7 +286,8 @@ sub auto : Private {
                 username => $sp_person->get_username(),
                 password => $sp_person->get_password(),
             });
-        } else {
+        }
+        else {
             # If not logged in, redirect to login page
             my $request_uri = $c->request->env->{REQUEST_URI};
             my @allowed_routes = ("/user/login", "/ajax/user/login", "/authenticate/check/token", "/authenticate/keycloak", "/authenticate/google");
