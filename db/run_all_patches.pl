@@ -49,7 +49,7 @@ for (my $i = 0; $i < (scalar @folders); $i++) {
         chdir($db_patch_path);
         chdir($folders[$i]);
         my @patches = grep {!($_ ~~ @installed)} map {s/.pm//r} (split "\n", `ls`);
-        
+
         for (my $j = 0; $j < (scalar @patches); $j++) {
             my $patch = $patches[$j];
 

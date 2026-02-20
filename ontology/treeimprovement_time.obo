@@ -20,7 +20,7 @@ is_a: TREEIMPROVEMENT_TIME:0000000 ! treeimprovement_time_terms
 [Term]
 id: TREEIMPROVEMENT_TIME:0000004
 name: year test
-def: "Age of tree in years" [] 
+def: "Age of tree in years" []
 relationship: variable_of TREEIMPROVEMENT_TIME:0000001 ! year
 
 [Term]
