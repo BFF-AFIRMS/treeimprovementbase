@@ -1,7 +1,7 @@
 <%init>
-  my $sgn_repository = $c->get_conf('sgn_repository');
-  my $sgn_tag = $c->get_conf('version');
-  my $sgn_updated = $c->get_conf('version_updated');
+  my $sgn_repository = $c->get_conf('sgn_repository') || '';
+  my $sgn_tag = $c->get_conf('version') || '';
+  my $sgn_updated = $c->get_conf('version_updated') || '';
 </%init>
 
 <!-- testing -->

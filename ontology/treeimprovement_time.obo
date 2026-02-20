@@ -1,0 +1,31 @@
+format-version: 1.0
+data-version: 1
+date: 02:20:2026 00:00
+saved-by: kmeaton1
+default-namespace: treeimprovement_time_ontology
+remark: none
+ontology: treeimprovement_time
+
+[Term]
+id: TREEIMPROVEMENT_TIME:0000000
+name: treeimprovement_time_terms
+
+[Term]
+id: TREEIMPROVEMENT_TIME:0000001
+name: year
+def: "Categorical years." []
+is_a: TREEIMPROVEMENT_TIME:0000000 ! treeimprovement_time_terms
+
+
+[Term]
+id: TREEIMPROVEMENT_TIME:0000004
+name: year test
+def: "Age of tree in years" [] 
+relationship: variable_of TREEIMPROVEMENT_TIME:0000001 ! year
+
+[Term]
+id: TREEIMPROVEMENT_TIME:0000003
+name: year 2
+synonym: "Y2" EXACT []
+def: "" []
+is_a: TREEIMPROVEMENT_TIME:0000001 ! year
