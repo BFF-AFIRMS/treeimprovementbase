@@ -22,6 +22,7 @@ TreeImprovementBase Modifications
     <li><a href="/search/vectors">Vector Constructs</a></li>
 
     <li role="separator" class="divider"></li>
+    <li><a href="/tools/onto/">Ontology Browser</a></li>
     <li><a href="/search/traits">Traits</a></li>
     <!--<li><a href="/search/markers">Markers</a></li>-->
     <li><a href="/search/images">Images</a></li>

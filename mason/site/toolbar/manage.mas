@@ -36,6 +36,8 @@
     <li><a href="/breeders/file_share_dump">File Share</a></li>
 
     <li role="seperator" class="divider"></li>
+    <li><a href="/tools/compose_trait/">Compose a New Trait</a></li>
+    <li><a href="/tools/compose_treatment/">Compose a New Treatment</a></li>
     <li><a href="/breeders/nirs">NIRS</a></li>
     <li><a href="/breeders/transcriptomics">Transcriptomics</a></li>
   </ul>

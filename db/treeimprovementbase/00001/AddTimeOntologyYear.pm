@@ -51,7 +51,8 @@ sub patch {
 
     print STDERR "INSERTING CV TERMS...\n";
 
-    my $age_in_years_rs = $schema->resultset("Cv::Cvterm")->create_with({ name => "age in years", definition=> "Years", cv => 'cxgn_time_ontology' });
+    my $age_in_years_rs = $schema->resultset("Cv::Cvterm")->create_with(
+        { name => "time in years", definition=> "years", cv => 'cxgn_time_ontology' });
     my $age_in_years_cvterm_id = $age_in_years_rs->cvterm_id();
     my $is_a_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'is_a', 'relationship')->cvterm_id();
 
@@ -64,6 +65,25 @@ sub patch {
             object_id  => $age_in_years_cvterm_id
         });
     }
+
+    $self->dbh->do(<<EOSQL);
+--do your SQL here
+--
+
+-- change the db reference from null (2) to TIME (304)
+update dbxref
+set
+  db_id = (select db_id from db where name = 'TIME'),
+  accession = lpad((split_part(accession,' ', 2)::int + 75)::text, 7, '0')
+where accession like 'autocreated:year %';
+
+-- change the relationships
+update cvterm_relationship
+set
+  object_id = (select cvterm_id from cvterm where name = 'time of year')
+where subject_id in (select cvterm_id from cvterm where name like '%year %');
+
+EOSQL
 
     print "You're done!\n";
 }
