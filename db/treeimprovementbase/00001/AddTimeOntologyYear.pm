@@ -71,10 +71,11 @@ sub patch {
 --
 
 -- change the db reference from null (2) to TIME (304)
+-- the TIME ontology ends at accession 480, so we will start these at 480
 update dbxref
 set
   db_id = (select db_id from db where name = 'TIME'),
-  accession = lpad((split_part(accession,' ', 2)::int + 75)::text, 7, '0')
+  accession = lpad((split_part(accession,' ', 2)::int + 481)::text, 7, '0')
 where accession like 'autocreated:year %';
 
 -- change the relationships

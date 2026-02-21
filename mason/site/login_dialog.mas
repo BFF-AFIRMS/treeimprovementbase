@@ -59,16 +59,6 @@ $goto_url => '/'
                         </div>
                     </div>
                 </form>
-                <div class="container-fluid" style="display: grid">
-                    <button style="margin-top: 10px" class="btn btn-default button-keycloak" id="login_with_keycloak" name="login_with_keycloak" onclick="location.href = '/authenticate/keycloak/start';">
-                        <img style="width:20px" src="/documents/img/Keycloak_logo.png"/>
-                        Keycloak
-                    </button>
-                    <button style="margin-top: 10px" class="btn btn-default button-google" id="login_with_google" name="login_with_google" onclick="location.href = '/authenticate/google/start';">
-                        <img style="width:20px" src="/documents/img/Google_logo.png"/>
-                        Google
-                    </button>
-                </div>
             </div>
             <div class="modal-footer">
 %  if (!$c->config->{require_login}) {
