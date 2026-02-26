@@ -124,7 +124,7 @@ if (! $ENV{TEST_DB_NAME}) {
     system("createdb -h $config->{dbhost} -U postgres -T template0 -E UTF8 --no-password $dbname");
     # will emit an error if web_usr role already exists, but that's OK
     system("psql -h $config->{dbhost} -U postgres $dbname -c \"CREATE USER web_usr PASSWORD '$db_user_password'\"");
-    system("psql -h $config->{dbhost} -U postgres $dbname -f $database_fixture_dump");
+    system("psql -h $config->{dbhost} -U postgres $dbname -f $database_fixture_dump 2>/dev/null");
 
     print STDERR "Done.\n";
 }
