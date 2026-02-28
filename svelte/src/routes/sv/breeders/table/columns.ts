@@ -36,8 +36,8 @@ export const columns: ColumnDef<ProgramType>[] = [
             name: "ID",
             onclick: column.getToggleSortingHandler(),
         }),
-    enableColumnFilter: true,
     enableSorting: true,
+    enableColumnFilter: true
   },
   {
     accessorKey: "programName",
@@ -49,13 +49,31 @@ export const columns: ColumnDef<ProgramType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<span class="font-medium">${row.original.programName}</span>`,
+          render: () => `<div class="font-medium">${row.original.programName}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
     },
     enableColumnFilter: true,
   },
+  {
+    accessorKey: "objective",
+    header: ({column}) =>
+        renderComponent(SortableHeader, {
+            name: "Objective",
+            onclick: column.getToggleSortingHandler(),
+        }),
+    cell: ({row}) => {
+      const cellSnippet = createRawSnippet<[string]>(() => {
+        return {
+          render: () => `<div class="text-left">${row.original.objective}</div>`,
+        };
+        });
+      return renderSnippet(cellSnippet);
+    },        
+    enableColumnFilter: true,
+    enableSorting: true,
+  },  
   {
     accessorKey: "abbreviation",
     // header: () => {
@@ -72,24 +90,6 @@ export const columns: ColumnDef<ProgramType>[] = [
         }),
     enableColumnFilter: true,
     enableSorting: true,
-  },
-  {
-    accessorKey: "objective",
-    header: ({column}) =>
-        renderComponent(SortableHeader, {
-            name: "Objective",
-            onclick: column.getToggleSortingHandler(),
-        }),    
-    //cell: ({ row }) => { return row.original.objective },
-    cell: ({ row }) => {
-      return renderSnippet(
-        createRawSnippet(() => ({
-          render: () => `<div class="text-left">${row.original.objective}</div>`,
-        })
-      ));
-    },
-    enableColumnFilter: true,
-    enableSorting: true,    
   },
   // {
   //   accessorKey: "description",

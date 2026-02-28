@@ -1,7 +1,6 @@
 <script lang="ts">
   import { columns } from "./table/columns.js";
   import DataTable from "$lib/components/app/data-table.svelte";
-  import {Skeleton } from "$lib/components/ui/skeleton/index.js";
 
   let { data } = $props();
 </script>
@@ -27,4 +26,3 @@
 {:catch error}
   Error!
 {/await}
-<br/>

@@ -6,11 +6,11 @@ import { brapi_url } from "../index.ts";
 export const ProgramSchema = z.object({
     abbreviation: z.string().nullable() || '',
     additionalInfo: z.object({
-        description: z.string().nullable().optional() || ''
+        description: z.string().nullable().optional() || '',
     }).nullable(),
+    objective: z.string().nullable(),
     programDbId:  z.string(),
     programName:  z.string(),
-    objective:  z.string().nullable(),
 });
 
 export type ProgramType = z.infer<typeof ProgramSchema>;
@@ -33,8 +33,6 @@ export async function programs (params?: Object){
     const response: Response = await fetch(url);
     const result = await response.json();
     let data = result.result.data;
-
-    //console.log("data:", data);
 
     if (data.length > 0) {
       result.result.data = data.map((record: Object) => ProgramSchema.parse(record))
