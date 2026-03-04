@@ -62,7 +62,7 @@ sub patch {
         genus => "Picea",
         species => "Picea glauca",
         common_name => "white spruce",
-    });    
+    });
 
     print "You're done!\n";
 }

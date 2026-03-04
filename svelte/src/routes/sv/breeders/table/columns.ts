@@ -70,10 +70,10 @@ export const columns: ColumnDef<ProgramType>[] = [
         };
         });
       return renderSnippet(cellSnippet);
-    },        
+    },
     enableColumnFilter: true,
     enableSorting: true,
-  },  
+  },
   {
     accessorKey: "abbreviation",
     // header: () => {

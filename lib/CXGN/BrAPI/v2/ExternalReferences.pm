@@ -121,7 +121,7 @@ sub store {
             urlprefix =>  'http://',
             url        => 'doi.org',
             } );
-            
+
             $ref_id =~ s/http:\/\/doi\.org//;
             $ref_id =~ s/https:\/\/doi\.org//;
             $ref_id =~ s/doi://;
@@ -152,7 +152,7 @@ sub store {
                     name => $ref_name,
                     url => $url
                 });
-            
+
                 if($object_id){
                   my $create_dbxref = $schema->resultset("General::Dbxref")->find_or_create({
                       db_id => $create_db->db_id(),
@@ -197,7 +197,7 @@ sub _remove_external_references {
 
 sub _check_brapi_url {
     my $url = shift;
-    
+
     my $url_object_id = "";
 
     if ($url =~ /brapi\/v[1-2]\//){
