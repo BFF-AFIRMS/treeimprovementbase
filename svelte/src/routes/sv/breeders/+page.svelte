@@ -7,6 +7,7 @@
 
 <h1>Breeding Programs</h1>
 
+<div style="height: 80vh">
 {#await data.promise }
 	<DataTable
     data={[]}
@@ -19,10 +20,12 @@
     data={response.result.data}
     caption="List of breeding programs."
     totalCount={response.metadata.pagination.totalCount}
-    pageSize={10}
+    pageSize={100}
     {columns}
     skeleton={false}
+    table_class="w-11/12 inline-block"
   />
 {:catch error}
   Error!
 {/await}
+</div>

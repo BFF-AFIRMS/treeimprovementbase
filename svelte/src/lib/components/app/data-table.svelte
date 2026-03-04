@@ -28,18 +28,20 @@
   import {Skeleton } from "$lib/components/ui/skeleton/index.js";
 
   import { renderComponent } from "$lib/components/ui/data-table/index.js";
+    import { page } from '$app/state';
 
   type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
-    data: TData[];
-    caption: String;
+    data: TData[],
+    caption: String,
     totalCount: number,
     pageSize: number,
-    currentPage: Number,
-    skeleton: boolean
+    currentPage: number,
+    skeleton: boolean,
+    table_class: String,
   };
 
-  let { data, columns, caption, totalCount, pageSize=10, currentPage=0, skeleton=false }: DataTableProps<TData, TValue> = $props();
+  let { data, columns, caption, totalCount, pageSize=10, currentPage=0, skeleton=false, table_class="" }: DataTableProps<TData, TValue> = $props();
 
   // if (skeleton == true) {
   //   columns.forEach(function (column, i){
@@ -50,7 +52,9 @@
   //   })
   // }
 
-  let pagination = $state<PaginationState>({ pageIndex: currentPage, pageSize: pageSize });
+  let pagination = $derived<PaginationState>({ pageIndex: currentPage, pageSize: pageSize });
+  $inspect("pagination:", pagination);
+
   let sorting = $state<SortingState>([]);
   let columnFilters = $state<ColumnFiltersState>([]);
   let rowSelection = $state<RowSelectionState>({});
@@ -94,25 +98,23 @@
     },
   });
 
-  const fruits = [
+  const rowsPerPageOptions = [
     { value: 1, label: "1" },
     { value: 5, label: "5" },
     { value: 10, label: "10" },
+    { value: 100, label: "100" },
+    { value: 1000, label: "1000" },
+    { value: 10000, label: "10000" },
   ];
 
-  let value = $state("1");
-
-  const triggerContent = $derived(
-    fruits.find((f) => f.value === value)?.label ?? "Rows"
-  );
 </script>
 
-<div>
-    <div class="rounded-md border shadow-sm p-2">
+<div class="h-full">
+  <div class="rounded-md border shadow-sm p-2 h-full {table_class}">
     <!-- Table-->
     <Table.Root>
-        <Table.Caption class="text-xs mb-1">{caption}</Table.Caption>
-        <Table.Header>
+        <Table.Caption class="text-xs mb-1 sticky bottom-0 bg-white">{caption}</Table.Caption>
+        <Table.Header class="sticky top-0 bg-white">
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
             <Table.Row>
             {#each headerGroup.headers as header (header.id)}
@@ -172,79 +174,71 @@
         {/if}
         </Table.Body>
     </Table.Root>
-    </div>
-
-
-<div class="flex items-center justify-between px-2">
-  <div class="text-muted-foreground flex-1 text-xs text-left">
-    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-    {table.getFilteredRowModel().rows.length} row(s) selected.
   </div>
 
-  <div class="flex items-center space-x-6 lg:space-x-4"><div class="flex items-center space-x-2">
-    <span class="text-muted-foreground text-xs">Rows per page</span>
-        <Select.Root type="single" name="favoriteFruit" bind:value>
+  <!-- Footer -->
+  <div class="flex items-center justify-between px-2">
+
+    <!-- Summarize Selected -->
+    <div class="text-muted-foreground flex-1 text-xs text-left">
+      {table.getFilteredSelectedRowModel().rows.length} of{" "}
+      {table.getFilteredRowModel().rows.length} row(s) selected.
+    </div>
+
+    <!-- Rows Per Page -->
+    <div class="flex items-center space-x-6 lg:space-x-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-muted-foreground text-xs">Rows per page</span>
+        <Select.Root
+          type="single"
+          name="rowsPerPage"
+          bind:value={
+          () => String(table.getState().pagination.pageSize),
+          (v) => table.setPageSize(Number(v))
+        }>
           <Select.Trigger class="w-[180px]">
-            {triggerContent}
+            {table.getState().pagination.pageSize}
           </Select.Trigger>
           <Select.Content>
             <Select.Group>
               <Select.Label>Rows</Select.Label>
-              {#each fruits as option (option.value)}
-                <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
+              {#each rowsPerPageOptions as option (option.value)}
+                <Select.Item value={String(option.value)} label={option.label}>{option.label}</Select.Item>
               {/each}
             </Select.Group>
           </Select.Content>
         </Select.Root>
-          <!-- <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value))
-            }}
-          >
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 25, 30, 40, 50].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>  -->
-  </div>
+      </div>
 
 
-  <!-- Pagination Controls-->
-  <div class="flex items-center justify-end space-x-2 py-4 pt-1 pb-1">
-  <Pagination.Root count={totalCount} perPage={pageSize} page={currentPage+1} {siblingCount}>
-    {#snippet children({ pages, currentPage })}
-      <Pagination.Content>
-        <Pagination.Item>
-          <Pagination.PrevButton onclick={() => table.previousPage()} class="text-xs"/>
-        </Pagination.Item>
-        {#each pages as page (page.key)}
-          {#if page.type === "ellipsis"}
+    <!-- Pagination Controls-->
+      <div class="flex items-center justify-end space-x-2 py-4 pt-1 pb-1">
+      <Pagination.Root count={totalCount} perPage={table.getState().pagination.pageSize} page={currentPage+1} {siblingCount}>
+        {#snippet children({ pages, currentPage })}
+          <Pagination.Content>
             <Pagination.Item>
-              <Pagination.Ellipsis />
+              <Pagination.PrevButton onclick={() => table.previousPage()} class="text-xs"/>
             </Pagination.Item>
-          {:else}
+            {#each pages as page (page.key)}
+              {#if page.type === "ellipsis"}
+                <Pagination.Item>
+                  <Pagination.Ellipsis />
+                </Pagination.Item>
+              {:else}
+                <Pagination.Item>
+                  <Pagination.Link {page} onclick={() => table.setPageIndex(page.value - 1)} isActive={currentPage === page.value} class="text-xs! w-min pl-2 pr-2 pt-1 pb-1 h-min rounded-sm">
+                    {page.value}
+                  </Pagination.Link>
+                </Pagination.Item>
+              {/if}
+            {/each}
             <Pagination.Item>
-              <Pagination.Link {page} onclick={() => table.setPageIndex(page.value - 1)} isActive={currentPage === page.value} class="text-xs! w-min pl-2 pr-2 pt-1 pb-1 h-min rounded-sm">
-                {page.value}
-              </Pagination.Link>
+              <Pagination.NextButton onclick={() => table.nextPage()} class="text-xs"/>
             </Pagination.Item>
-          {/if}
-        {/each}
-        <Pagination.Item>
-          <Pagination.NextButton onclick={() => table.nextPage()} class="text-xs"/>
-        </Pagination.Item>
-      </Pagination.Content>
-    {/snippet}
-  </Pagination.Root>
+          </Pagination.Content>
+        {/snippet}
+      </Pagination.Root>
+      </div>
+    </div>
   </div>
-  </div>
-</div>
-
 </div>

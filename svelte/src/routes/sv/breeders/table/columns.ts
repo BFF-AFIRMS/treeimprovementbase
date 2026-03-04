@@ -5,7 +5,6 @@ import {type ProgramType} from "$lib/brapi/v2";
 
 import Actions from "./actions.svelte";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
-import {Skeleton } from "$lib/components/ui/skeleton/index.js";
 import SortableHeader from "./sortable.svelte";
 
 export const columns: ColumnDef<ProgramType>[] = [
@@ -66,7 +65,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="text-left">${row.original.objective}</div>`,
+          render: () => `<div class="text-left whitespace-normal">${row.original.objective}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
