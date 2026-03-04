@@ -1,5 +1,4 @@
 <script lang="ts" generics="TData, TValue">
-  import { setContext } from 'svelte';
   import { MediaQuery } from "svelte/reactivity";
   import * as Pagination from "$lib/components/ui/pagination/index.js";
   const isDesktop = new MediaQuery("(min-width: 768px)");
@@ -11,6 +10,7 @@
     type SortingState,
     type ColumnFiltersState,
     type RowSelectionState,
+    type VisibilityState,
     getCoreRowModel,
     getPaginationRowModel,
     getSortedRowModel,
@@ -22,13 +22,12 @@
     FlexRender,
   } from "$lib/components/ui/data-table/index.js";
 
+  import { Button } from "$lib/components/ui/button/index.js";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Table from "$lib/components/ui/table/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import {Skeleton } from "$lib/components/ui/skeleton/index.js";
-
-  import { renderComponent } from "$lib/components/ui/data-table/index.js";
-    import { page } from '$app/state';
 
   type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
@@ -57,6 +56,7 @@
 
   let sorting = $state<SortingState>([]);
   let columnFilters = $state<ColumnFiltersState>([]);
+ let columnVisibility = $state<VisibilityState>({});
   let rowSelection = $state<RowSelectionState>({});
 
   const table = createSvelteTable({
@@ -69,10 +69,11 @@
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      get pagination()    { return pagination; },
-      get sorting()       { return sorting; },
-      get columnFilters() { return columnFilters; },
-      get rowSelection()  { return rowSelection; },
+      get columnFilters()    { return columnFilters; },
+      get columnVisibility() { return columnVisibility},
+      get pagination()       { return pagination; },
+      get rowSelection()     { return rowSelection; },
+      get sorting()          { return sorting; },
     },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") { pagination = updater(pagination); }
@@ -87,6 +88,13 @@
         columnFilters = updater(columnFilters);
       } else {
         columnFilters = updater;
+      }
+    },
+    onColumnVisibilityChange: (updater) => {
+      if (typeof updater === "function") {
+        columnVisibility = updater(columnVisibility);
+      } else {
+        columnVisibility = updater;
       }
     },
     onRowSelectionChange: (updater) => {
@@ -111,6 +119,32 @@
 
 <div class="h-full">
   <div class="rounded-md border shadow-sm p-2 h-full {table_class}">
+
+  <div class="flex items-center py-4">
+
+    <!-- Column Visibility -->
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        {#snippet child({ props })}
+          <Button {...props} variant="outline" class="ms-auto">Columns</Button>
+        {/snippet}
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content align="end">
+        {#each table
+          .getAllColumns()
+          .filter((col) => col.getCanHide()) as column (column.id)}
+          <DropdownMenu.CheckboxItem
+            bind:checked={
+              () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
+            }
+          >
+            {column.id}
+          </DropdownMenu.CheckboxItem>
+        {/each}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  </div>
+
     <!-- Table-->
     <Table.Root>
         <Table.Caption class="text-xs mb-1 sticky bottom-0 bg-white">{caption}</Table.Caption>

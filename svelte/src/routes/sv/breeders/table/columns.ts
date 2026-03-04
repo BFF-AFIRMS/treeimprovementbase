@@ -9,7 +9,7 @@ import SortableHeader from "./sortable.svelte";
 
 export const columns: ColumnDef<ProgramType>[] = [
   {
-    id: "select",
+    id: "Select",
     header: ({ table }) =>
       renderComponent(Checkbox, {
         checked: table.getIsAllPageRowsSelected(),
@@ -29,6 +29,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     enableHiding: false,
   },
   {
+    id: "ID",
     accessorKey: "programDbId",
     header: ({column}) =>
         renderComponent(SortableHeader, {
@@ -39,6 +40,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     enableColumnFilter: true
   },
   {
+    id: "Name",
     accessorKey: "programName",
     header: ({column}) =>
         renderComponent(SortableHeader, {
@@ -56,6 +58,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     enableColumnFilter: true,
   },
   {
+    id: "Objective",
     accessorKey: "objective",
     header: ({column}) =>
         renderComponent(SortableHeader, {
@@ -74,6 +77,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     enableSorting: true,
   },
   {
+    id: "Abbreviation",
     accessorKey: "abbreviation",
     // header: () => {
     //   return renderSnippet(
@@ -96,7 +100,7 @@ export const columns: ColumnDef<ProgramType>[] = [
   //   cell: ({ row }) => { return row.original.additionalInfo.description }
   // },
   {
-    id: "actions",
+    id: "Action",
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(Actions, { name: row.original.programName });
