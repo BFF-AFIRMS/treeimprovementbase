@@ -1,0 +1,23 @@
+<%once>
+use utf8;
+</%once>
+
+<%perl>
+  my @svelte_overrides = (
+    "/breeders_toolbox/breeding_programs.mas"
+  );
+  my $template = $c->state;
+</%perl>
+
+
+% if ( ! grep( /^$template$/, @svelte_overrides ) ) {
+  <& /site/header.mas &>
+
+% $m->call_next;
+
+  <& /site/footer.mas &>
+% } else {
+
+% $m->call_next;
+
+% }
