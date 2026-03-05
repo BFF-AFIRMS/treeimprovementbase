@@ -5,10 +5,11 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: resources/issues.tsv
+        exclude: t/data/fixture/cxgn_fixture.sql
         args: [--markdown-linebreak-ext=md]
 
       - id: end-of-file-fixer
+        exclude: t/data/fixture/cxgn_fixture.sql
 
       - id: check-yaml
 
