@@ -120,35 +120,35 @@
 <div class="h-full">
   <div class="rounded-md border shadow-sm p-2 h-full {table_class}">
 
-  <div class="flex items-center py-4">
+    <div class="flex items-center py-2">
 
-    <!-- Column Visibility -->
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        {#snippet child({ props })}
-          <Button {...props} variant="outline" class="ms-auto">Columns</Button>
-        {/snippet}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content align="end">
-        {#each table
-          .getAllColumns()
-          .filter((col) => col.getCanHide()) as column (column.id)}
-          <DropdownMenu.CheckboxItem
-            bind:checked={
-              () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
-            }
-          >
-            {column.id}
-          </DropdownMenu.CheckboxItem>
-        {/each}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  </div>
+      <!-- Column Visibility -->
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          {#snippet child({ props })}
+            <Button {...props} variant="outline" class="ms-auto">Columns</Button>
+          {/snippet}
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end">
+          {#each table
+            .getAllColumns()
+            .filter((col) => col.getCanHide()) as column (column.id)}
+            <DropdownMenu.CheckboxItem
+              bind:checked={
+                () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
+              }
+            >
+              {column.id}
+            </DropdownMenu.CheckboxItem>
+          {/each}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </div>
 
     <!-- Table-->
     <Table.Root>
-        <Table.Caption class="text-xs mb-1 sticky bottom-0 bg-white">{caption}</Table.Caption>
-        <Table.Header class="sticky top-0 bg-white">
+        <Table.Caption class="text-xs pt-4 pb-0 sticky bottom-0 bg-white z-1">{caption}</Table.Caption>
+        <Table.Header class="sticky top-0 bg-white z-1">
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
             <Table.Row>
             {#each headerGroup.headers as header (header.id)}
