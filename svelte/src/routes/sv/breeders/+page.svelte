@@ -16,6 +16,7 @@
     skeleton={true}
   />
 {:then response}
+
     <DataTable
     data={response.result.data}
     caption="List of breeding programs."
@@ -23,7 +24,7 @@
     pageSize={100}
     {columns}
     skeleton={false}
-    table_class="w-11/12 inline-block"
+    tableClass="w-11/12 inline-block"
   />
 {:catch error}
   Error!

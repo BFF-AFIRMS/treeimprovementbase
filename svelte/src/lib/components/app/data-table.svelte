@@ -29,7 +29,7 @@
   import * as Select from "$lib/components/ui/select/index.js";
   import {Skeleton } from "$lib/components/ui/skeleton/index.js";
 
-  import {exportToCsv} from "$lib/export-to-csv";
+  import {exportToCsv, exportToExcel} from "$lib/export-table";
 
 
   type DataTableProps<TData, TValue> = {
@@ -40,15 +40,21 @@
     pageSize: number,
     currentPage: number,
     skeleton: boolean,
-    table_name: string,
-    table_class: String,
+    filePrefix: string,
+    tableClass: String,
   };
 
   let {
     data,
     columns,
     caption,
-    totalCount, pageSize=10, currentPage=0, skeleton=false, table_class="" }: DataTableProps<TData, TValue> = $props();
+    totalCount,
+    pageSize=10,
+    currentPage=0,
+    skeleton=false,
+    tableClass="",
+    filePrefix="table"
+  }: DataTableProps<TData, TValue> = $props();
 
   // if (skeleton == true) {
   //   columns.forEach(function (column, i){
@@ -125,7 +131,7 @@
 </script>
 
 <div class="h-full">
-  <div class="rounded-md border shadow-sm p-2 h-full {table_class}">
+  <div class="rounded-md border shadow-sm p-2 h-full {tableClass}">
 
     <div class="flex items-center py-2">
 
@@ -151,7 +157,8 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 
-      <Button onclick={() => exportToCsv(table)}>Export To CSV</Button>
+      <Button class="ml-2" onclick={() => exportToCsv(table, ",", filePrefix + ".csv")}>Export To CSV</Button>
+      <Button class="ml-2" onclick={() => exportToExcel(table, filePrefix + ".xlsx")}>Export To Excel</Button>
     </div>
 
     <!-- Table-->
