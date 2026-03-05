@@ -72,9 +72,8 @@
   let rowSelection = $state<RowSelectionState>({});
 
   const table = createSvelteTable({
-    get data() {
-      return data;
-    },
+    get data() { return data },
+    // svelte-ignore state_referenced_locally
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

@@ -81,5 +81,5 @@
   <li><a href="/sv">SV (client)</a></li>
   <li><a data-sveltekit-reload href="/sv">SV (reload)</a></li>
   <li><a href="/sv/organisms">Organisms</a></li>
-  <li><a href="/sv/breeders">Breeding Programs</a></li>
+  <li><a href="/mason/breeders_toolbox/breeding_programs">Breeding Programs</a></li>
 </ul>
