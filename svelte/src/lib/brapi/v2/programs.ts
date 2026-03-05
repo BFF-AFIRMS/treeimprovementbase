@@ -21,21 +21,43 @@ export type ProgramType = z.infer<typeof ProgramSchema>;
  * @return {ProgramSchema[]}
  */
 export async function programs (params?: Object){
+
+    let error: string | null = null;
+    let result = { result: {data: [], error: error } };
+
     let url = `${brapi_url}/programs`;
     if (params){
       let query = new URLSearchParams(params).toString();
       url += `?${query}`;
     }
 
-    // Testing awaiting promises
-    await new Promise(r => setTimeout(r, 2000));
+    // Might be useful one day
+    // let cookies = Object.fromEntries(document.cookie
+    //   .replace(" ", "")
+    //   .split(";")
+    //   .map((record) => {
+    //     let i = record.indexOf("=");
+    //     return [record.slice(0, i).trim(), record.slice(i+1, record.length).trim()]
+    //   }));
 
-    const response: Response = await fetch(url);
-    const result = await response.json();
+    // Testing awaiting promises
+    // await new Promise(r => setTimeout(r, 2000));
+
+    let response: Response;
+
+    try {
+      response = await fetch(url);
+    } catch(e) {
+      // TBD: Get cause to pass along correctly;
+      result.result.error = e.message;
+      return result;
+    }
+
+    result = await response.json();
 
     // If fetch failed, return with error
     if (response.status != 200){
-      result.result = {data: [], error: `${response.statusText} (${response.status})`};
+      result.result.error = `${response.statusText} (${response.status})`;
       return result
     }
 

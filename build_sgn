@@ -5,6 +5,11 @@ script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "---------------------------------------------------------"
 echo "Building svelte app"
 
+# if [[ -z $DOMAIN_NAME ]]; then
+#     echo -e "ERROR: The variable DOMAIN_NAME must be defined"
+#     exit 1
+# fi
+
 cd ${script_dir}/svelte
 npm install
 npm run build
