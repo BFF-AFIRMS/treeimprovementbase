@@ -137,7 +137,7 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Button {...props} variant="outline" class="ms-auto ml-2">Columns</Button>
+            <Button {...props} variant="outline" class="ms-auto ml-2">Column Visibility</Button>
           {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">

@@ -12,7 +12,7 @@ cd ../
 
 echo -e "---------------------------------------------------------"
 echo -e "Symlinking _app"
-ln -f -s svelte/build/_app static/_app
+ln -f -s ../svelte/build/_app static/_app
 
 
 echo -e "Symlinking mason:"

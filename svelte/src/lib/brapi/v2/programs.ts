@@ -28,12 +28,19 @@ export async function programs (params?: Object){
     }
 
     // Testing awaiting promises
-    // await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 2000));
 
     const response: Response = await fetch(url);
     const result = await response.json();
-    let data = result.result.data;
 
+    // If fetch failed, return with error
+    if (response.status != 200){
+      result.result = {data: [], error: `${response.statusText} (${response.status})`};
+      return result
+    }
+
+    // Otherwise, parse the data
+    let data = result.result.data;
     if (data.length > 0) {
       result.result.data = data.map((record: Object) => ProgramSchema.parse(record))
     } else {
