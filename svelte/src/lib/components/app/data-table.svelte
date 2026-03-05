@@ -41,7 +41,7 @@
     currentPage: number,
     skeleton: boolean,
     filePrefix: string,
-    tableClass: String,
+    footerClass: String,
   };
 
   let {
@@ -52,7 +52,6 @@
     pageSize=10,
     currentPage=0,
     skeleton=false,
-    tableClass="",
     filePrefix="table"
   }: DataTableProps<TData, TValue> = $props();
 
@@ -131,7 +130,7 @@
 </script>
 
 <div class="h-full">
-  <div class="rounded-md border shadow-sm p-2 h-full {tableClass}">
+  <div class="rounded-md border shadow-sm p-2 h-full inline-block w-full">
 
     <div class="flex items-center py-2">
 
