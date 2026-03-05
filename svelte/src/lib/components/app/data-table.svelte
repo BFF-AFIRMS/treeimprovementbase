@@ -126,7 +126,7 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Button {...props} variant="outline" class="ms-auto">Columns</Button>
+            <Button {...props} variant="outline" class="ms-auto ml-2">Columns</Button>
           {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">
