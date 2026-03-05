@@ -9,7 +9,7 @@ import SortableHeader from "./sortable.svelte";
 
 export const columns: ColumnDef<ProgramType>[] = [
   {
-    id: "Select",
+    id: "rowSelect",
     header: ({ table }) =>
       renderComponent(Checkbox, {
         checked: table.getIsAllPageRowsSelected(),
@@ -68,7 +68,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="text-left whitespace-normal">${row.original.objective}</div>`,
+          render: () => `<div class="text-left whitespace-normal sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-full">${row.original.objective}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
@@ -100,7 +100,7 @@ export const columns: ColumnDef<ProgramType>[] = [
   //   cell: ({ row }) => { return row.original.additionalInfo.description }
   // },
   {
-    id: "Action",
+    id: "rowAction",
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(Actions, { name: row.original.programName });

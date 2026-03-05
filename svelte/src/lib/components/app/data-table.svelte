@@ -29,18 +29,26 @@
   import * as Select from "$lib/components/ui/select/index.js";
   import {Skeleton } from "$lib/components/ui/skeleton/index.js";
 
+  import {exportToCsv} from "$lib/export-to-csv";
+
+
   type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
     data: TData[],
-    caption: String,
+    caption: string,
     totalCount: number,
     pageSize: number,
     currentPage: number,
     skeleton: boolean,
+    table_name: string,
     table_class: String,
   };
 
-  let { data, columns, caption, totalCount, pageSize=10, currentPage=0, skeleton=false, table_class="" }: DataTableProps<TData, TValue> = $props();
+  let {
+    data,
+    columns,
+    caption,
+    totalCount, pageSize=10, currentPage=0, skeleton=false, table_class="" }: DataTableProps<TData, TValue> = $props();
 
   // if (skeleton == true) {
   //   columns.forEach(function (column, i){
@@ -52,11 +60,10 @@
   // }
 
   let pagination = $derived<PaginationState>({ pageIndex: currentPage, pageSize: pageSize });
-  $inspect("pagination:", pagination);
 
   let sorting = $state<SortingState>([]);
   let columnFilters = $state<ColumnFiltersState>([]);
- let columnVisibility = $state<VisibilityState>({});
+  let columnVisibility = $state<VisibilityState>({});
   let rowSelection = $state<RowSelectionState>({});
 
   const table = createSvelteTable({
@@ -143,6 +150,8 @@
           {/each}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
+
+      <Button onclick={() => exportToCsv(table)}>Export To CSV</Button>
     </div>
 
     <!-- Table-->
@@ -190,7 +199,7 @@
           {#each table.getRowModel().rows as row (row.id)}
               <Table.Row data-state={row.getIsSelected() && "selected"}>
               {#each row.getVisibleCells() as cell (cell.id)}
-                  <Table.Cell>
+                  <Table.Cell class="p-1">
                   <FlexRender
                       content={cell.column.columnDef.cell}
                       context={cell.getContext()}
