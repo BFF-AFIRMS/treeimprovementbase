@@ -18,6 +18,8 @@ ln -f -s svelte/build/_app static/_app
 echo -e "Symlinking mason:"
 find ${script_dir}/svelte/build/mason -type f -name "*.html" | while read target; do
     link=$(echo $target | sed -e "s|$script_dir/svelte/build/mason|$script_dir/mason|g" -e "s|.html$|.mas|g")
+    # Create link directory if it does not exist
+    mkdir -p $(dirname $link)
     echo -e "\tln -f -s $target $link"
     ln -f -s $target $link
 done
