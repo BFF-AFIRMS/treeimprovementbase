@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 echo "---------------------------------------------------------"
@@ -11,6 +13,25 @@ echo "Building svelte app"
 # fi
 
 cd ${script_dir}/svelte
+
+if [[ ! -f .env ]]; then
+    echo -e "Creating env file: .env"
+    if [[ $MODE == "DEVELOPMENT" ]]; then
+        echo "PUBLIC_BREEDBASE_URL=http://localhost:8080" > .env
+    elif [[ $MODE == "TESTING" ]]; then
+        echo "PUBLIC_BREEDBASE_URL=http://localhost:3010" > .env
+    elif [[ $MODE == "PRODUCTION" ]]; then
+        if [[ -z $DOMAIN_NAME ]]; then
+            echo "ERROR: Env var DOMAIN_NAME must be specified for production mode"
+            exit
+        fi
+        echo "PUBLIC_BREEDBASE_URL=https://${DOMAIN_NAME}" > .env
+    else
+        echo "No MODE specified, defaulting to http://localhost:8080"
+        echo "PUBLIC_BREEDBASE_URL=http://localhost:8080" > .env
+    fi
+fi
+
 npm install
 npm run build
 cd ../
