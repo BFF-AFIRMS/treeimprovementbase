@@ -43,6 +43,7 @@
     skeleton: boolean,
     filePrefix: string,
     footerClass: String,
+    refreshTable: Function,
   };
 
   let {
@@ -50,6 +51,7 @@
     columns,
     caption,
     totalCount,
+    refreshTable,
     pageSize=10,
     currentPage=0,
     skeleton=false,
@@ -160,6 +162,9 @@
         <ButtonGroup.Root>
           <Button variant="outline" size="sm" onclick={() => exportToCsv(table, ",", filePrefix + ".csv")}>Export to CSV</Button>
           <Button variant="outline" size="sm" onclick={() => exportToExcel(table, filePrefix + ".xlsx")}>Export to Excel</Button>
+          {#if refreshTable}
+            <Button variant="outline" size="sm" onclick={refreshTable}>Refresh Table</Button>
+          {/if}
         </ButtonGroup.Root>
       </div>
 

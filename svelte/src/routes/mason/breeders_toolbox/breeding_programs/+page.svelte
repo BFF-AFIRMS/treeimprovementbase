@@ -23,7 +23,6 @@
   let submit_success: string | null = $state(null);
   let submitDialogOpen: boolean = $state(false);
 
-
   function refreshTable() {
     data = programs(params);
   }
@@ -79,8 +78,10 @@
 
   {#await data }
     <div class="inline-block w-11/12 h-80">
-      <DataTable data={[]} {caption} {columns} skeleton={true}>
-        <Button slot="buttons" variant="outline" class="ms-auto ml-2" onclick={refreshTable}>Refresh Table</Button>
+      <DataTable data={[]} {caption} {columns} {refreshTable} skeleton={true}>
+        <Button slot="buttons" size="sm" class="btn-primary ml-4" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {submitDialogOpen = true}}>
+            Add New Program
+        </Button>
       </DataTable>
     </div>
   {:then response}
@@ -91,8 +92,10 @@
 
     {#if response.result.data.length == 0}
       <div class="inline-block w-11/12 h-80">
-        <DataTable data={[]} {caption} {columns} skeleton={false}>
-          <Button slot="buttons" variant="outline" class="ms-auto ml-2" onclick={refreshTable}>Refresh Table</Button>
+        <DataTable data={[]} {caption} {columns} {refreshTable} skeleton={false}>
+          <Button slot="buttons" size="sm" class="btn-primary ml-4" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {submitDialogOpen = true}}>
+              Add New Program
+          </Button>
         </DataTable>
       </div>
     {:else}
@@ -103,9 +106,12 @@
           totalCount={response.metadata.pagination.totalCount}
           {pageSize}
           {columns}
+          {refreshTable}
           skeleton={false}
         >
-          <Button slot="buttons" variant="outline" class="ms-auto ml-2" onclick={refreshTable}>Refresh Table</Button>
+          <Button slot="buttons" size="sm" class="btn-primary ml-4" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {submitDialogOpen = true}}>
+              Add New Program
+          </Button>
         </DataTable>
       </div>
     {/if}
@@ -113,13 +119,10 @@
       <Alert title="Error Fetching Programs" description={"An unhandled error occurred. "  + error}/>
 
       <div class="inline-block w-11/12 h-80">
-        <DataTable data={[]} {caption} {columns} skeleton={false}>
-          <div slot="buttons">
-            <Button variant="outline" class="ms-auto ml-2" onclick={refreshTable}>Refresh Table</Button>
-            <Button size="sm" class="btn-primary" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {submitDialogOpen = true}}>
+        <DataTable data={[]} {caption} {columns} {refreshTable} skeleton={false}>
+          <Button slot="buttons" size="sm" class="btn-primary ml-4" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {submitDialogOpen = true}}>
               Add New Program
-            </Button>
-          </div>
+          </Button>
         </DataTable>
       </div>
   {/await}
