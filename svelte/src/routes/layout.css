@@ -12,13 +12,18 @@
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
+  /* --primary: oklch(0.208 0.042 265.755); */
   --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
+  --primary: var(--color-green-700);
+  /*--secondary: oklch(0.968 0.007 247.896);*/
+  --secondary: var(--color-mgray-100);
   --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
+  /* --muted: oklch(0.968 0.007 247.896); */
+  --muted: var(--color-mgray-75);
+  /* --muted-foreground: oklch(0.554 0.046 257.417); */
+  --muted-foreground: var(--color-mgray-600);
+  /*--accent: oklch(0.968 0.007 247.896);*/
+  --accent: var(--color-mgray-50);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.929 0.013 255.508);
@@ -86,6 +91,7 @@
 
     /* Mathesar Gray: https://mathesar.org */
     --color-mgray-50:  #faf8f5;
+    --color-mgray-75:  #F6F4F0;
     --color-mgray-100: #f2f0eb;
     --color-mgray-200: #e6e3db;
     --color-mgray-300: #d4d0c4;
@@ -101,6 +107,9 @@
 
   --font-sans: InterVariable, sans-serif;
   --font-sans--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+
+  /* Shadows */
+  --shadow-color: rgba(0, 0, 0, .1);
 
 }
 
@@ -143,7 +152,11 @@
 }
 
 @utility button-box-shadow {
-  box-shadow: var(--shadow-color) 0 1px 2px 0, var(--shadow-color) 0 1px 3px 0;
+  box-shadow: var(--button-box-shadow);
+}
+
+.btn-primary {
+  @apply bg-green-700 hover:bg-green-800 border-1 border-green-900 button-box-shadow cursor-pointer;
 }
 
 @utility nav-menu-gradient {

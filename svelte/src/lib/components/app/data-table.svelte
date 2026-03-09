@@ -22,7 +22,8 @@
     FlexRender,
   } from "$lib/components/ui/data-table/index.js";
 
-  import { Button } from "$lib/components/ui/button/index.js";
+  import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+  import * as ButtonGroup from "$lib/components/ui/button-group/index.js";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Table from "$lib/components/ui/table/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -52,7 +53,7 @@
     pageSize=10,
     currentPage=0,
     skeleton=false,
-    filePrefix="table"
+    filePrefix="table",
   }: DataTableProps<TData, TValue> = $props();
 
   // if (skeleton == true) {
@@ -137,7 +138,7 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Button {...props} variant="outline" class="ms-auto ml-2">Column Visibility</Button>
+            <Button {...props} variant="outline" size="sm" class="ms-auto ml-2 mr-4">Column Visibility</Button>
           {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">
@@ -155,8 +156,15 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 
-      <Button class="ml-2" onclick={() => exportToCsv(table, ",", filePrefix + ".csv")}>Export To CSV</Button>
-      <Button class="ml-2" onclick={() => exportToExcel(table, filePrefix + ".xlsx")}>Export To Excel</Button>
+      <div class="flex flex-col items-start gap-8">
+        <ButtonGroup.Root>
+          <Button variant="outline" size="sm" onclick={() => exportToCsv(table, ",", filePrefix + ".csv")}>Export to CSV</Button>
+          <Button variant="outline" size="sm" onclick={() => exportToExcel(table, filePrefix + ".xlsx")}>Export to Excel</Button>
+        </ButtonGroup.Root>
+      </div>
+
+      <slot name="buttons"></slot>
+
     </div>
 
     <!-- Table-->
@@ -164,9 +172,9 @@
         <Table.Caption class="text-xs pt-4 pb-0 sticky bottom-0 bg-white z-1">{caption}</Table.Caption>
         <Table.Header class="sticky top-0 bg-white z-1">
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-            <Table.Row>
+            <Table.Row class="hover:red!">
             {#each headerGroup.headers as header (header.id)}
-                <Table.Head colspan={header.colSpan}>
+                <Table.Head colspan={header.colSpan} class="p-2">
                 {#if !header.isPlaceholder}
                     <FlexRender
                     content={header.column.columnDef.header}
