@@ -14,9 +14,6 @@
 
 <h1>Breeding Programs</h1>
 
-
-<hr>
-
 <div class="mt-4">
 
   {#await data }

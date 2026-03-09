@@ -2,7 +2,6 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import {App} from '$lib/components/app';
-
 	let { children } = $props();
 </script>
 
