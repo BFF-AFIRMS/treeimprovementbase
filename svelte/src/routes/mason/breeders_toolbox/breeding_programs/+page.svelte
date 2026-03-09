@@ -3,6 +3,7 @@
   import DataTable from "$lib/components/app/data-table.svelte";
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { buttonVariants } from "$lib/components/ui/button/index.js";
+  import Alert from "./alert.svelte";
 
   import {programs} from "$lib/brapi/v2";
   let params = {pageSize: 1000000};
@@ -23,20 +24,7 @@
   {:then response}
 
     {#if response.result.error}
-
-      <AlertDialog.Root open={true}>
-        <AlertDialog.Content>
-          <AlertDialog.Header>
-            <AlertDialog.Title>Error Fetching Programs</AlertDialog.Title>
-            <AlertDialog.Description>
-              {response.result.error}
-            </AlertDialog.Description>
-          </AlertDialog.Header>
-          <AlertDialog.Footer>
-            <AlertDialog.Cancel class={buttonVariants({ variant: "default" })}>Ok</AlertDialog.Cancel>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
+      <Alert error={response.result.error}/>
     {/if}
 
     {#if response.result.data.length == 0}
@@ -56,7 +44,11 @@
       </div>
     {/if}
   {:catch error}
-    Unhandled error
+      <Alert error={"An unhandled error occurred. "  + error}/>
+
+      <div class="inline-block w-11/12 h-80">
+        <DataTable data={[]} {caption} {columns} skeleton={false}/>
+      </div>
   {/await}
 
 </div>

@@ -5,7 +5,11 @@
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+</svelte:head>
+
 <App>
 {@render children()}
 </App>
