@@ -24,7 +24,7 @@
       name: z.string({ error: (iss) => iss.input == null ? "Name is a required field." : "Name is invalid." }),
       desc: z.string({ error: (iss) => iss.input == null ? "Description is a required field." : "Description is invalid." })
     });
-  
+
   // State
   let submitData = $state(ProgramSchema.parse({}));
   let submitErrorMessage: string | null = $state(null);
@@ -52,7 +52,7 @@
       let url = `${PUBLIC_BREEDBASE_URL}/breeders/program/store?${query}`;
       const response = await fetch(url, { method: 'POST'});
       console.log("response:", response);
-    
+
       if (!response.ok){
         submitErrorMessage = `Failed to upload the new breeding program. ${response.statusText} (${response.status}).`
         return;

@@ -26,7 +26,7 @@
       deleteErrorMessage = `Failed to delete the breeding program. ${response.statusText} (${response.status}).`
     }
   }
-  
+
 </script>
 
 <DropdownMenu.Root>
