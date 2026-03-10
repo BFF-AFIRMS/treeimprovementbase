@@ -2,11 +2,11 @@
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { buttonVariants } from "$lib/components/ui/button/index.js";
 
-  let { description, title, onDismiss } = $props();
+  let { description, title, onOpenChange = null, open = false } = $props();
 </script>
 
 
-<AlertDialog.Root open={true}>
+<AlertDialog.Root open={open} onOpenChange={onOpenChange}>
 <AlertDialog.Content>
     <AlertDialog.Header>
     <AlertDialog.Title>{title}</AlertDialog.Title>
@@ -15,11 +15,7 @@
     </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-    {#if onDismiss}
-        <AlertDialog.Cancel class={buttonVariants({ variant: "default" })} onclick={onDismiss}>Ok</AlertDialog.Cancel>
-    {:else}
-        <AlertDialog.Cancel class={buttonVariants({ variant: "default" })}>Ok</AlertDialog.Cancel>
-    {/if}
+    <AlertDialog.Cancel class={buttonVariants({ variant: "default" })}>Ok</AlertDialog.Cancel>
     </AlertDialog.Footer>
 </AlertDialog.Content>
 </AlertDialog.Root>

@@ -71,18 +71,7 @@ export const exportToExcel = (table, fileName: string = "file.xlsx") => {
     let csv = tableToCsv(table)
 
     if (csv) {
-        console.log("csv:", csv);
         let workbook = XLSX.read(csv, { type: "string" });
         XLSX.writeFile(workbook,fileName);
-        // let data = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-
-        // // const blob = new Blob([csvArray], { type: 'application/vnd.ms-excel;charset=utf-8' });
-        // let blob = new Blob([data], { type: "application/vnd.ms-excel;charset=utf-8" });
-        // downloadBlob(blob, fileName);
     }
-
-
-    // { type: 'application/vnd.ms-excel;charset=utf-8' });
-    // { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;' });
-    // var wb = XLSX.utils.table_to_book(document.getElementById("TableToExport"));
 }

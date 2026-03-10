@@ -44,6 +44,7 @@
     filePrefix: string,
     footerClass: String,
     refreshTable: Function,
+    buttons: Function,
   };
 
   let {
@@ -52,6 +53,7 @@
     caption,
     totalCount,
     refreshTable,
+    buttons,
     pageSize=10,
     currentPage=0,
     skeleton=false,
@@ -131,16 +133,16 @@
 
 </script>
 
-<div class="h-full">
+<div class="h-full min-w-[425px]">
   <div class="rounded-md border shadow-sm p-2 h-full inline-block w-full">
 
-    <div class="flex items-center py-2">
+    <div class="flex items-center py-2 ml-2 flex-wrap gap-2">
 
       <!-- Column Visibility -->
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Button {...props} variant="outline" size="sm" class="ms-auto ml-2 mr-4">Column Visibility</Button>
+            <Button {...props} variant="outline" size="sm" class="ms-auto ml-0 mr-2">Column Visibility</Button>
           {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">
@@ -168,8 +170,9 @@
         </ButtonGroup.Root>
       </div>
 
-      <slot name="buttons"></slot>
-
+      {#if buttons}
+        {@render buttons()}
+      {/if}
     </div>
 
     <!-- Table-->

@@ -76,24 +76,24 @@ export const columns: ColumnDef<ProgramType>[] = [
     enableColumnFilter: true,
     enableSorting: true,
   },
-  {
-    id: "Abbreviation",
-    accessorKey: "abbreviation",
-    // header: () => {
-    //   return renderSnippet(
-    //     createRawSnippet(() => ({
-    //       render: () => `<div class="text-center">Abbreviation</div>`,
-    //     })
-    //   ));
-    // },
-    header: ({column}) =>
-        renderComponent(SortableHeader, {
-            name: "Abbreviation",
-            onclick: column.getToggleSortingHandler(),
-        }),
-    enableColumnFilter: true,
-    enableSorting: true,
-  },
+  // {
+  //   id: "Abbreviation",
+  //   accessorKey: "abbreviation",
+  //   // header: () => {
+  //   //   return renderSnippet(
+  //   //     createRawSnippet(() => ({
+  //   //       render: () => `<div class="text-center">Abbreviation</div>`,
+  //   //     })
+  //   //   ));
+  //   // },
+  //   header: ({column}) =>
+  //       renderComponent(SortableHeader, {
+  //           name: "Abbreviation",
+  //           onclick: column.getToggleSortingHandler(),
+  //       }),
+  //   enableColumnFilter: true,
+  //   enableSorting: true,
+  // },
   // {
   //   accessorKey: "description",
   //   header: "Description",
@@ -103,7 +103,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     id: "rowAction",
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName });
+      return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
     },
     enableColumnFilter: false,
   },
