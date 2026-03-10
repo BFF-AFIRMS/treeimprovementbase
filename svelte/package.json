@@ -4,13 +4,14 @@
 	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"build-watch": "vite build --watch",
-		"preview": "vite preview",
+		"dev": "npm run setup && vite dev",
+		"build": "npm run setup && vite build",
+		"build-watch": "npm run setup && vite build --watch",
+		"preview": "npm run setup && vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"setup": "bash -c 'if [[ ! -f .env ]]; then cp .env.template .env; fi'"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.10.1",

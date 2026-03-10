@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { error } from '@sveltejs/kit';
+import { getCookies } from "$lib/cookies/cookies.js";
 import { brapi_url } from "../index.ts";
 
 // This type is used to define the shape of our data.
@@ -31,14 +32,11 @@ export async function programs (params?: Object){
       url += `?${query}`;
     }
 
-    // Might be useful one day
-    // let cookies = Object.fromEntries(document.cookie
-    //   .replace(" ", "")
-    //   .split(";")
-    //   .map((record) => {
-    //     let i = record.indexOf("=");
-    //     return [record.slice(0, i).trim(), record.slice(i+1, record.length).trim()]
-    //   }));
+    let cookies = getCookies();
+    let headers : Record<string, string> = {};
+    if ('sgn_session_id' in cookies){
+      headers['Authorization'] = `Bearer ${cookies.sgn_session_id}`;
+    }
 
     // Testing awaiting promises
     // await new Promise(r => setTimeout(r, 2000));
@@ -46,20 +44,20 @@ export async function programs (params?: Object){
     let response: Response;
 
     try {
-      response = await fetch(url);
-    } catch(e) {
-      // TBD: Get cause to pass along correctly;
-      result.result.error = e.message;
+      response = await fetch(url, {headers: headers});
+    } catch(error) {
+      // TBD: Get error.cause to pass along correctly;
+      result.result.error = error.message;
       return result;
     }
-
-    result = await response.json();
 
     // If fetch failed, return with error
     if (response.status != 200){
       result.result.error = `${response.statusText} (${response.status})`;
       return result
     }
+
+    result = await response.json();
 
     // Otherwise, parse the data
     let data = result.result.data;

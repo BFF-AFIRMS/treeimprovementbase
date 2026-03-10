@@ -103,7 +103,7 @@ export const columns: ColumnDef<ProgramType>[] = [
     id: "rowAction",
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(Actions, { name: row.original.programName });
+      return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName });
     },
     enableColumnFilter: false,
   },
