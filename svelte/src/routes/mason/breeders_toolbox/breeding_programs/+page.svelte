@@ -10,7 +10,7 @@
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Field from "$lib/components/ui/field/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { ProgramSchema, createProgram } from "$lib/breedbase/program.svelte.js";
+  import { ProgramSchema, createProgram } from "$lib/breedbase/program.js";
 
   // State
   let createData = $state(ProgramSchema.parse({}));

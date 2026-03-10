@@ -10,7 +10,7 @@
   import * as Field from "$lib/components/ui/field/index.js";
   import EllipsisIcon from "@lucide/svelte/icons/ellipsis";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { deleteProgram, editProgram, ProgramSchema } from "$lib/breedbase/program.svelte.js";
+  import { deleteProgram, editProgram, ProgramSchema } from "$lib/breedbase/program.js";
 
   // States
   let deleteDialogOpen = $state(false);
