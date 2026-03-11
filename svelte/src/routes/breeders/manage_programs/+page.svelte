@@ -30,6 +30,7 @@
     createErrorMessage = result.error;
     createSuccessMessage = result.success;
   }
+
 </script>
 
 <!-- Button to add a new program -->
@@ -98,7 +99,7 @@
 <!-- Dialog box to submit a breeding program -->
 <Dialog.Root open={createDialogOpen} onOpenChange={() => createDialogOpen = !createDialogOpen}>
   <form method="POST">
-    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]">
+    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateProgram() : null}>
       <Dialog.Header>
         <Dialog.Title id="addBreedingProgramDialog">Store Breeding Program Details</Dialog.Title>
         <Dialog.Description>
@@ -117,7 +118,7 @@
         <Dialog.Close type="button" onclick={() => createDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
           Close
         </Dialog.Close>
-        <Button type="submit" name="store_breeding_program_submit" id="store_breeding_program_submit" onclick={submitCreateProgram}>Store Breeding Program Details</Button>
+        <Button type="submit" onclick={submitCreateProgram} name="store_breeding_program_submit" id="store_breeding_program_submit">Store Breeding Program Details</Button>
       </Dialog.Footer>
     </Dialog.Content>
   </form>

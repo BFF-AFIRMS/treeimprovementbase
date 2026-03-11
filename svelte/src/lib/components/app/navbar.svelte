@@ -86,7 +86,7 @@
         <NavigationMenu.Trigger class="h-full nav-menu-trigger!">New</NavigationMenu.Trigger>
         <NavigationMenu.Content class="nav-menu-content">
           <ul class="nav-menu-content-list">
-            <li>
+            <li data-sveltekit-reload>
               <NavigationMenu.Link href={resolve("/breeders/manage_programs")} class="nav-menu-link">Breeding Programs</NavigationMenu.Link>
               <NavigationMenu.Link href={resolve("/search/organisms")} class="nav-menu-link">Organisms</NavigationMenu.Link>
             </li>

@@ -26,6 +26,7 @@
   let program = $derived(ProgramSchema.parse({id: id, name: name, desc: desc}));
 
   async function submitDeleteProgram(){
+    console.log("submitDeleteProgram");
     let result = await deleteProgram({program: program});
     deleteErrorMessage = result.error;
     deleteSuccessMessage = result.success;
