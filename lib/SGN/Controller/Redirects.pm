@@ -99,7 +99,7 @@ sub find_redirect : Private {
     $c->log->debug("searching for redirects, path='$path' query='$query'") if $c->debug;
 
     # svelte _app builds
-    $path =~ s/.*_app/_app/g;
+    #$path =~ s/.*_app/_app/g;
 
     # if the path has multiple // in it, collapse them and redirect to
     # the result

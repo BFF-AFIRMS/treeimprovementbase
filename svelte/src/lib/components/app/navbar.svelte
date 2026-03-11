@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { asset, resolve } from '$app/paths';
   import * as NavigationMenu from "$lib/components/ui/navigation-menu/index.js";
 
   const navbarHeight = "15";
@@ -9,7 +10,7 @@
 <!-- <NavigationMenu.Root viewport={isMobile.current}> -->
 <div class="min-h-{navbarHeight} w-full bg-mgray-100 button-box-shadow mb-8">
   <NavigationMenu.Root viewport={false} class="h-full">
-    <img src="/documents/img/BFF-AFIRMS_logo_LoRes.png" alt="BFF-AFIRMS logo" class="ml-4 mr-4 pt-1 pb-2 h-15">
+    <a  href={resolve("/")}><img src={asset("/img/BFF-AFIRMS_logo_LoRes.png")} alt="BFF-AFIRMS logo" class="ml-4 mr-4 pt-1 pb-2 h-15"></a>
 
     <NavigationMenu.List class="flex-wrap h-{navbarHeight}">
 
@@ -80,6 +81,18 @@
         </NavigationMenu.Content>
       </NavigationMenu.Item>
 
+      <!-- New Menu -->
+      <NavigationMenu.Item class="hidden md:block h-full" openOnHover={false}>
+        <NavigationMenu.Trigger class="h-full nav-menu-trigger!">New</NavigationMenu.Trigger>
+        <NavigationMenu.Content class="nav-menu-content">
+          <ul class="nav-menu-content-list">
+            <li>
+              <NavigationMenu.Link href={resolve("/breeders/manage_programs")} class="nav-menu-link">Breeding Programs</NavigationMenu.Link>
+              <NavigationMenu.Link href={resolve("/search/organisms")} class="nav-menu-link">Organisms</NavigationMenu.Link>
+            </li>
+          </ul>
+        </NavigationMenu.Content>
+      </NavigationMenu.Item>
     </NavigationMenu.List>
   </NavigationMenu.Root>
 </div>

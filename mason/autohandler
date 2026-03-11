@@ -3,21 +3,16 @@ use utf8;
 </%once>
 
 <%perl>
-  my @svelte_overrides = (
-    "/breeders_toolbox/breeding_programs.mas"
-  );
   my $template = $c->state;
 </%perl>
 
 
-% if ( ! grep( /^$template$/, @svelte_overrides ) ) {
-  <& /site/header.mas &>
+% if ( rindex($template, "/svelte/", 0) == 0) {
 
 % $m->call_next;
 
-  <& /site/footer.mas &>
 % } else {
-
+  <& /site/header.mas &>
 % $m->call_next;
-
+  <& /site/footer.mas &>
 % }

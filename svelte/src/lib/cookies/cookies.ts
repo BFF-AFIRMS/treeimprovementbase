@@ -1,4 +1,3 @@
-
 export function getCookies() {
     return Object.fromEntries(document.cookie
       .replace(" ", "")

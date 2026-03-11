@@ -15,6 +15,7 @@ TreeImprovementBase Modifications
         <& toolbar/manage.mas &>
         <& toolbar/analyze.mas &>
         <& toolbar/about.mas &>
+        <& toolbar/svelte.mas &>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <& toolbar/search.mas &>

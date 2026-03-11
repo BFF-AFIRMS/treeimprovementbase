@@ -1,12 +1,12 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import { asset } from '$app/paths';
 	import {App} from '$lib/components/app';
 	let { children } = $props();
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href={asset("/favicon.ico")} />
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 </svelte:head>
 

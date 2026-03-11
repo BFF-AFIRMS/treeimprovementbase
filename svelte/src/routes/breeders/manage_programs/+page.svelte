@@ -61,7 +61,7 @@
 <div class="mt-4">
 
   <!-- While we're waiting, display a skeleton table -->
-  {#await getData() }
+  {#await getData()}
     {@render SkeletonTable()}
 
   <!-- Data query has finished -->
