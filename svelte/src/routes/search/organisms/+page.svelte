@@ -2,11 +2,14 @@
     // Imports
     import Alert from "$lib/components/app/alert.svelte";
     import { fetchData, getData } from "./table/data.svelte.js";
+    import TestComponent from "./test.svelte";
 </script>
 
 <h1>Organism/Taxon Search</h1>
 
 <hr class="mt-4 mb-8">
+
+<TestComponent/>
 
 <!-- Main Data Table -->
 <div class="mt-4">

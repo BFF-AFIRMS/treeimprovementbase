@@ -15,8 +15,6 @@ export type OrganismType = z.infer<typeof OrganismSchema>;
 
 export async function organisms (params?: Object){
 
-    console.log("here!");
-
     let error: string | null = null;
     let result = { result: {data: [], error: error } };
 

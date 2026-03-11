@@ -6,8 +6,11 @@ import {type ProgramType} from "$lib/brapi/v2";
 import Actions from "./actions.svelte";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
 import SortableHeader from "./sortable.svelte";
+import { User } from "$lib/breedbase";
 
-export const columns: ColumnDef<ProgramType>[] = [
+let userRole = await User.getRole();
+
+export var columns: ColumnDef<ProgramType>[] = [
   {
     id: "rowSelect",
     header: ({ table }) =>
@@ -99,12 +102,24 @@ export const columns: ColumnDef<ProgramType>[] = [
   //   header: "Description",
   //   cell: ({ row }) => { return row.original.additionalInfo.description }
   // },
-  {
-    id: "rowAction",
-    cell: ({ row }) => {
-      // You can pass whatever you need from `row.original` to the component
-      return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
-    },
-    enableColumnFilter: false,
-  },
+  // {
+  //   id: "rowAction",
+  //   cell: ({ row }) => {
+  //     // You can pass whatever you need from `row.original` to the component
+  //     return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
+  //   },
+  //   enableColumnFilter: false,
+  // },
 ];
+
+if (userRole.data.user_role == 'curator'){
+  columns.push(
+    {
+      id: "rowAction",
+      cell: ({ row }) => {
+        return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
+      },
+      enableColumnFilter: false,
+    },
+  )
+}

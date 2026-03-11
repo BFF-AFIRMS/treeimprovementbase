@@ -11,15 +11,15 @@
   import * as Field from "$lib/components/ui/field/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { ProgramSchema, createProgram } from "$lib/breedbase/program.js";
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 
   // State
   let createData = $state(ProgramSchema.parse({}));
   let createErrorMessage: string | null = $state(null);
   let createSuccessMessage: string | null = $state(null);
   let createDialogOpen: boolean = $state(false);
-
-  $inspect("createErrorMessage:", createErrorMessage);
-  $inspect("createSuccessMessage:", createSuccessMessage);
 
   // Table Display Options
   let caption = "List of breeding programs.";
@@ -35,9 +35,11 @@
 
 <!-- Button to add a new program -->
 {#snippet NewProgramButton()}
+  {#if data.user_role == 'curator' }
   <Button slot="buttons" size="sm" class="btn-primary" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {createDialogOpen = true}}>
     Add New Program
   </Button>
+  {/if}
 {/snippet}
 
 <!-- Table with 'skeleton' rows to indicate data is still loading -->
@@ -69,7 +71,7 @@
   {:then response}
 
     {#if response.result.error}
-      <Alert title="Error Fetching Programs" description={response.result.error}/>
+      <Alert title="Error Fetching Programs" description={response.result.error} open={true}/>
     {/if}
 
     {#if response.result.data.length == 0}
