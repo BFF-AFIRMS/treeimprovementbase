@@ -45,6 +45,47 @@ sub get_breeding_programs :Path('/ajax/svelte/breeding_programs') Args(0) {
     };
 }
 
+sub create_organism :Path('/ajax/svelte/organism/create') Args(0) {
+    my $self = shift;
+    my $c = shift;
+
+    try {
+        my $species = $c->req->param("species");
+        my $common_name = $c->req->param("common_name") || undef;
+        my $abbreviation = $c->req->param("abbreviation") || undef;
+
+        if (!($c->user() || $c->user()->check_roles('submitter'))) {
+            $c->stash->{rest} = { error => 'You need to be logged in and have sufficient privileges to add or edit an organism.' };
+        }
+
+        my @species_split = split(' ', $species);
+        my $genus = $species_split[0];
+
+        my $schema = $c->dbic_schema("Bio::Chado::Schema");
+
+        if (! defined $species){
+            die "Species is a required field.\n";
+        }
+        # Check if organism already exists
+        my $organism_rs = $schema->resultset('Organism::Organism')->search({
+            species => $species
+        });
+        if ($organism_rs){
+            die "Species already exists in the database: $species\n";
+        }
+
+        my $q = "
+        insert into public.organism (species, genus, common_name, abbreviation)
+        values (?, ?, ?, ?)";
+        my $h = $schema->storage->dbh()->prepare($q);
+        $h->execute($species, $genus, $common_name, $abbreviation);
+
+    } catch {
+        $c->stash->{rest} = { error => $_};
+    };
+
+}
+
 sub get_organisms :Path('/ajax/svelte/organisms') Args(0) {
     my $self = shift;
     my $c = shift;

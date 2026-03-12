@@ -5,7 +5,7 @@
   import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
   import { cn } from "$lib/utils.js";
   import { columns } from "./table/columns.js";
-  import { Schema as Organism } from "$lib/breedbase/organism";
+  import { Schema as Organism, create as createOrganism } from "$lib/breedbase/organism";
   import DataTable from "$lib/components/app/data-table.svelte";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Field from "$lib/components/ui/field/index.js";
@@ -25,11 +25,11 @@
   let caption = "List of organisms.";
   let pageSize = 100;
 
-  // async function submitCreateOrganism(){
-  //   let result = await createOrganism({program: createData});
-  //   createErrorMessage = result.error;
-  //   createSuccessMessage = result.success;
-  // }
+  async function submitCreateOrganism(){
+    let result = await createOrganism({program: createData});
+    createErrorMessage = result.error;
+    createSuccessMessage = result.success;
+  }
 
 </script>
 
@@ -98,8 +98,39 @@
   {/await}
 </div>
 
+<!-- Dialog box to submit a breeding program -->
+<Dialog.Root open={createDialogOpen} onOpenChange={() => createDialogOpen = !createDialogOpen}>
+  <form method="POST">
+    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateOrganism() : null}>
+      <Dialog.Header>
+        <Dialog.Title>Create Organism</Dialog.Title>
+        <Dialog.Description>
+          Add a new organism to the database.
+        </Dialog.Description>
+      </Dialog.Header>
+      <Field.Field>
+        <Field.Label>Species</Field.Label>
+        <Input bind:value={createData.species} type="text" placeholder="Pinus contorta" required/>
+      </Field.Field>
+      <Field.Field>
+        <Field.Label>Common Name</Field.Label>
+        <Input bind:value={createData.common_name} type="text" placeholder="lodgepole pine"/>
+      </Field.Field>
+      <Field.Field>
+        <Field.Label>Abbreviation</Field.Label>
+        <Input bind:value={createData.abbreviation} type="text" placeholder="P.contorta" required/>
+      </Field.Field>
+      <Dialog.Footer class="inline-block text-right">
+        <Dialog.Close type="button" onclick={() => createDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
+          Close
+        </Dialog.Close>
+        <Button type="submit" onclick={submitCreateOrganism}>Submit</Button>
+      </Dialog.Footer>
+    </Dialog.Content>
+  </form>
+</Dialog.Root>
 
-<!-- Alerts for success/error status of creating a program -->
+<!-- Alerts for success/error status of creating an organism -->
 <Alert
   title="Error Creating New Organism"
   description={createErrorMessage}

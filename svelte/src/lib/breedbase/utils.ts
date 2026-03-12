@@ -39,7 +39,7 @@ export async function fetchResult({ url, method, errorMsg, successMsg }: {url: s
   return result;
 }
 
-function parseErrors(parsed) {
+export function parseErrors(parsed) {
   if (!parsed.success) {
     let errorMessages: string[] = [];
     parsed.error.issues.forEach((issue) => {

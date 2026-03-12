@@ -1,4 +1,4 @@
-import { fetchResult } from './utils';
+import { fetchResult, parseErrors, ResultSchema } from './utils';
 import { z } from 'zod';
 
 // ----------------------------------------------------------------------------
@@ -14,8 +14,40 @@ export const Schema = z.object({
 }).default({});
 export type SchemaType = z.infer<typeof Schema>;
 
+// Required schema to create a new organism
+export const CreateSchema = z.object({
+    species: z.string({ error: (iss) => iss.input == null ? "Species is a required field." : `Species is invalid: ${iss.input}` }),
+    common_name: z.string().nullable().default(null),
+    abbreviation: z.string().nullable().default(null),
+});
+export type CreateType = z.infer<typeof CreateSchema>;
+
+
 // ----------------------------------------------------------------------------
 // Actions
+
+// Create new organism
+export async function create({program} : {program: SchemaType}) {
+
+  let result = ResultSchema.parse({});
+
+  // Input validation
+  let parsed = CreateSchema.safeParse(program);
+  result.error = parseErrors(parsed);
+  if (result.error){ return result; }
+
+  // Post data to backend server
+  const query = new URLSearchParams(parsed.data).toString();
+  result = await fetchResult({
+    url: `/ajax/svelte/organism/create?${query}`,
+    method: 'GET',
+    errorMsg: 'Failed to create organism.',
+    successMsg: 'Succeeded in creating organism.'
+  });
+
+  return result;
+
+}
 
 // Get all organisms
 export async function get() {

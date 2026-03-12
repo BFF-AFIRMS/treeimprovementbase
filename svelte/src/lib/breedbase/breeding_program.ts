@@ -1,4 +1,4 @@
-import { fetchResult, ResultSchema } from './utils';
+import { fetchResult, parseErrors, ResultSchema } from './utils';
 import { z } from 'zod';
 
 // ----------------------------------------------------------------------------
@@ -133,20 +133,4 @@ export async function remove({program} : {program: SchemaType}) {
 
   return result;
 
-}
-
-
-// ----------------------------------------------------------------------------
-// Utilities
-
-function parseErrors(parsed) {
-  if (!parsed.success) {
-    let errorMessages: string[] = [];
-    parsed.error.issues.forEach((issue) => {
-      errorMessages.push(issue.message);
-    })
-    return errorMessages.join(" ");
-  } else {
-    return null;
-  }
 }
