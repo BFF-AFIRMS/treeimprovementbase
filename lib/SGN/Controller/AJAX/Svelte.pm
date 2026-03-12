@@ -1,6 +1,7 @@
 
 package SGN::Controller::AJAX::Svelte;
 
+use Data::Dumper;
 use Moose;
 use JSON::Any;
 use Try::Tiny;
@@ -12,6 +13,37 @@ __PACKAGE__->config(
     stash_key => 'rest',
     map       => { 'application/json' => 'JSON' },
    );
+
+sub get_breeding_programs :Path('/ajax/svelte/breeding_programs') Args(0) {
+    my $self = shift;
+    my $c = shift;
+
+    try {
+        if (!$c->user){die "Not logged in.\n";}
+        my $schema = $c->dbic_schema("Bio::Chado::Schema");
+        my $q = "
+        select project_id, name, description
+        from project
+        left join projectprop using (project_id)
+        where projectprop.type_id=(select cvterm_id from cvterm where name = 'breeding_program');";
+        my $h = $schema->storage->dbh()->prepare($q);
+        $h->execute();
+
+        my @breeding_programs;
+        while (my ($project_id, $name, $description) = $h->fetchrow_array()){
+            my $record = {
+                project_id => $project_id,
+                name => $name,
+                description => $description,
+            };;
+            push (@breeding_programs, $record);
+        }
+        $c->stash->{rest} = { breeding_programs => \@breeding_programs};
+
+    } catch {
+        $c->stash->{rest} = { error => $_};
+    };
+}
 
 sub get_user_roles :Path('/ajax/user/role') Args(0) {
     my $self = shift;

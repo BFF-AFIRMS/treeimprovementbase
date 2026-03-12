@@ -10,7 +10,7 @@
   import * as Field from "$lib/components/ui/field/index.js";
   import EllipsisIcon from "@lucide/svelte/icons/ellipsis";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { deleteProgram, editProgram, ProgramSchema } from "$lib/breedbase/program.js";
+  import { edit as editBreedingProgram, remove as deleteBreedingProgram, Schema as BreedingProgram } from "$lib/breedbase/breeding_program";
 
   // States
   let deleteDialogOpen = $state(false);
@@ -22,12 +22,11 @@
   let editSuccessMessage: string | null = $state(null);
 
   // Props
-  let { id, name, desc }: { id: Number, name: string, desc: string  } = $props();
-  let program = $derived(ProgramSchema.parse({id: id, name: name, desc: desc}));
+  let { project_id, name, description }: { project_id: Number, name: string, description: string  } = $props();
+  let program = $derived(BreedingProgram.parse({project_id: project_id, name: name, description: description}));
 
   async function submitDeleteProgram(){
-    console.log("submitDeleteProgram");
-    let result = await deleteProgram({program: program});
+    let result = await deleteBreedingProgram({program: program});
     deleteErrorMessage = result.error;
     deleteSuccessMessage = result.success;
     if (result.error) {
@@ -36,7 +35,7 @@
   }
 
   async function submitEditProgram(){
-    let result = await editProgram({program: program});
+    let result = await editBreedingProgram({program: program});
     editErrorMessage = result.error;
     editSuccessMessage = result.success;
   }
@@ -108,7 +107,7 @@
       </Field.Field>
       <Field.Field>
         <Field.Label>Description</Field.Label>
-        <Input bind:value={desc} type="text" required/>
+        <Input bind:value={description} type="text" required/>
       </Field.Field>
       <Dialog.Footer class="inline-block text-right">
         <Dialog.Close type="button" onclick={() => editDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
@@ -123,7 +122,7 @@
 <!-- Alerts to indicate success/error of editing a breeding program -->
 <Alert
   title="Error Editing Breeding Program"
-  description={editErrorMessage}
+  descriptionription={editErrorMessage}
   onOpenChange={() => {editErrorMessage = null}}
   open={editErrorMessage}
 />

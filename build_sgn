@@ -40,4 +40,5 @@ echo -e "---------------------------------------------------------"
 echo -e "Symlinking build"
 ln -f -s ../svelte/build static/svelte
 
-# TBD: autohandler paths
+echo -e "Symlinking sgn"
+ln -f -s ../../treeimprovementbase/svelte/build ../sgn/mason/svelte

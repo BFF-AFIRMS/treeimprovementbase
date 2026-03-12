@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/table-core";
 import { createRawSnippet } from "svelte";
 import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/index.js";
-import {type ProgramType} from "$lib/brapi/v2";
+import {type BreedingProgramType} from "$lib/breedbase/breeding_program";
 
 import Actions from "./actions.svelte";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
@@ -10,7 +10,7 @@ import { User } from "$lib/breedbase";
 
 let userRole = await User.getRole();
 
-export var columns: ColumnDef<ProgramType>[] = [
+export var columns: ColumnDef<BreedingProgramType>[] = [
   {
     id: "rowSelect",
     header: ({ table }) =>
@@ -33,7 +33,7 @@ export var columns: ColumnDef<ProgramType>[] = [
   },
   {
     id: "ID",
-    accessorKey: "programDbId",
+    accessorKey: "project_id",
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "ID",
@@ -44,7 +44,7 @@ export var columns: ColumnDef<ProgramType>[] = [
   },
   {
     id: "Name",
-    accessorKey: "programName",
+    accessorKey: "name",
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Name",
@@ -53,7 +53,7 @@ export var columns: ColumnDef<ProgramType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="font-medium">${row.original.programName}</div>`,
+          render: () => `<div class="font-medium">${row.original.name}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
@@ -61,17 +61,17 @@ export var columns: ColumnDef<ProgramType>[] = [
     enableColumnFilter: true,
   },
   {
-    id: "Objective",
-    accessorKey: "objective",
+    id: "Description",
+    accessorKey: "description",
     header: ({column}) =>
         renderComponent(SortableHeader, {
-            name: "Objective",
+            name: "Description",
             onclick: column.getToggleSortingHandler(),
         }),
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="text-left whitespace-normal sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-full">${row.original.objective}</div>`,
+          render: () => `<div class="text-left whitespace-normal sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-full">${row.original.description}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
@@ -96,20 +96,7 @@ export var columns: ColumnDef<ProgramType>[] = [
   //       }),
   //   enableColumnFilter: true,
   //   enableSorting: true,
-  // },
-  // {
-  //   accessorKey: "description",
-  //   header: "Description",
-  //   cell: ({ row }) => { return row.original.additionalInfo.description }
-  // },
-  // {
-  //   id: "rowAction",
-  //   cell: ({ row }) => {
-  //     // You can pass whatever you need from `row.original` to the component
-  //     return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
-  //   },
-  //   enableColumnFilter: false,
-  // },
+  // }
 ];
 
 if (userRole.data.user_role == 'curator'){
@@ -117,7 +104,7 @@ if (userRole.data.user_role == 'curator'){
     {
       id: "rowAction",
       cell: ({ row }) => {
-        return renderComponent(Actions, { id: row.original.programDbId, name: row.original.programName, desc: row.original.objective });
+        return renderComponent(Actions, { project_id: row.original.project_id, name: row.original.name, description: row.original.description });
       },
       enableColumnFilter: false,
     },

@@ -5,18 +5,18 @@
   import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
   import { cn } from "$lib/utils.js";
   import { columns } from "./table/columns.js";
-  import { fetchData, getData } from "./table/data.svelte.js";
+  import { create as createBreedingProgram, Schema as BreedingProgram } from "$lib/breedbase/breeding_program";
   import DataTable from "$lib/components/app/data-table.svelte";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Field from "$lib/components/ui/field/index.js";
+  import { getData, fetchData } from "./table/data.svelte.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { ProgramSchema, createProgram } from "$lib/breedbase/program.js";
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
   // State
-  let createData = $state(ProgramSchema.parse({}));
+  let createData = $state(BreedingProgram.parse({}));
   let createErrorMessage: string | null = $state(null);
   let createSuccessMessage: string | null = $state(null);
   let createDialogOpen: boolean = $state(false);
@@ -25,8 +25,8 @@
   let caption = "List of breeding programs.";
   let pageSize = 100;
 
-  async function submitCreateProgram(){
-    let result = await createProgram({program: createData});
+  async function submitCreateBreedingProgram(){
+    let result = await createBreedingProgram({program: createData});
     createErrorMessage = result.error;
     createSuccessMessage = result.success;
   }
@@ -70,18 +70,18 @@
   <!-- Data query has finished -->
   {:then response}
 
-    {#if response.result.error}
-      <Alert title="Error Fetching Programs" description={response.result.error} open={true}/>
+    {#if response.error}
+      <Alert title="Error Fetching Programs" description={response.error} open={true}/>
     {/if}
 
-    {#if response.result.data.length == 0}
+    {#if response.data.length == 0}
       {@render EmptyTable()}
     {:else}
       <div class="inline-block w-11/12 h-[70vh]">
         <DataTable
-          data={response.result.data}
+          data={response.data}
           {caption}
-          totalCount={response.metadata.pagination.totalCount}
+          totalCount={response.data.length}
           {pageSize}
           {columns}
           refreshTable={fetchData}
@@ -101,7 +101,7 @@
 <!-- Dialog box to submit a breeding program -->
 <Dialog.Root open={createDialogOpen} onOpenChange={() => createDialogOpen = !createDialogOpen}>
   <form method="POST">
-    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateProgram() : null}>
+    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateBreedingProgram() : null}>
       <Dialog.Header>
         <Dialog.Title id="addBreedingProgramDialog">Store Breeding Program Details</Dialog.Title>
         <Dialog.Description>
@@ -114,13 +114,13 @@
       </Field.Field>
       <Field.Field>
         <Field.Label for="store_breeding_program_desc">Description</Field.Label>
-        <Input bind:value={createData.desc} name="store_breeding_program_desc" id="store_breeding_program_desc" type="text" required/>
+        <Input bind:value={createData.description} name="store_breeding_program_desc" id="store_breeding_program_desc" type="text" required/>
       </Field.Field>
       <Dialog.Footer class="inline-block text-right">
         <Dialog.Close type="button" onclick={() => createDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
           Close
         </Dialog.Close>
-        <Button type="submit" onclick={submitCreateProgram} name="store_breeding_program_submit" id="store_breeding_program_submit">Store Breeding Program Details</Button>
+        <Button type="submit" onclick={submitCreateBreedingProgram} name="store_breeding_program_submit" id="store_breeding_program_submit">Store Breeding Program Details</Button>
       </Dialog.Footer>
     </Dialog.Content>
   </form>

@@ -15,7 +15,10 @@ export async function fetchResult({ url, method, errorMsg, successMsg }: {url: s
 
     let response: Response;
     try {
-        response = await fetch(`${PUBLIC_BREEDBASE_URL}${url}`, {method: method});
+        response = await fetch(
+            `${PUBLIC_BREEDBASE_URL}${url}`,
+            {method: method, credentials: "include"}
+        );
     } catch(error) {
         result.error = error.message;
         return result;

@@ -1,11 +1,9 @@
-import { programs } from "$lib/brapi/v2";
-
-export const params = {pageSize: 1000000};
-let data = $state(programs(params));
+import { get as getBreedingPrograms } from "$lib/breedbase/breeding_program";
+let data = $state(getBreedingPrograms());
 
 // Fetch new data for the table
 export function fetchData() {
-    data = programs(params);
+    data = getBreedingPrograms();
 }
 
 export function getData() {

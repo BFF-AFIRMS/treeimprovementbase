@@ -1,7 +1,7 @@
 // Inspired by: https://github.com/grvctr/tanstack-table-export-to-csv
 
 import {type Header, type Row, type RowData} from "@tanstack/table-core";
-import * as XLSX from "xlsx";
+import {writeFile as XLSXWriteFile, read as XLSXRead} from "xlsx";
 
 export const downloadBlob = (blob: Blob, fileName: string) => {
     // Download blob as file
@@ -71,7 +71,7 @@ export const exportToExcel = (table, fileName: string = "file.xlsx") => {
     let csv = tableToCsv(table)
 
     if (csv) {
-        let workbook = XLSX.read(csv, { type: "string" });
-        XLSX.writeFile(workbook,fileName);
+        let workbook = XLSXRead(csv, { type: "string" });
+        XLSXWriteFile(workbook,fileName);
     }
 }
