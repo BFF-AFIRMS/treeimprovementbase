@@ -1,11 +1,9 @@
-import { organisms } from "$lib/breedbase/organism.js";
-
-export const params = {};
-let data = $state(organisms(params));
+import { get as getOrganisms } from "$lib/breedbase/organism";
+let data = $state(getOrganisms());
 
 // Fetch new data for the table
 export function fetchData() {
-    data = organisms(params);
+    data = getOrganisms();
 }
 
 export function getData() {

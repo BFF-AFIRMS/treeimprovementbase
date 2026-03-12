@@ -1,11 +1,10 @@
-import { fetchResult, ResultSchema } from './result';
+import { fetchResult, ResultSchema } from './utils';
 import { z } from 'zod';
 
 // ----------------------------------------------------------------------------
 // Schemas
 
-// Generic return type for functions in this module
-// Organism schema
+// Breeding Program schema
 export const Schema = z.object({
     project_id: z.coerce.number().int().nullable().default(null),
     name: z.string().nullable().default(null),

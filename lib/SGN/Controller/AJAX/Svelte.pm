@@ -45,7 +45,34 @@ sub get_breeding_programs :Path('/ajax/svelte/breeding_programs') Args(0) {
     };
 }
 
-sub get_user_roles :Path('/ajax/user/role') Args(0) {
+sub get_organisms :Path('/ajax/svelte/organisms') Args(0) {
+    my $self = shift;
+    my $c = shift;
+
+    try {
+        my $schema = $c->dbic_schema("Bio::Chado::Schema");
+        my $q = "select organism_id, common_name, abbreviation, genus, species from public.organism";
+        my $h = $schema->storage->dbh()->prepare($q);
+        $h->execute();
+
+        my @organisms;
+        while (my ($organism_id, $common_name, $abbreviation, $genus, $species) = $h->fetchrow_array()){
+            my $record = {
+                organism_id => $organism_id,
+                common_name => $common_name,
+                abbreviation => $abbreviation,
+                genus => $genus,
+                species => $species,
+            };;
+            push (@organisms, $record);
+        }
+        $c->stash->{rest} = { organisms => \@organisms};
+    } catch {
+        $c->stash->{rest} = { error => $_};
+    };
+}
+
+sub get_user_role :Path('/ajax/user/role') Args(0) {
     my $self = shift;
     my $c = shift;
 

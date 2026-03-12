@@ -1,16 +1,16 @@
 import type { ColumnDef } from "@tanstack/table-core";
 import { createRawSnippet } from "svelte";
 import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/index.js";
-import {type BreedingProgramType} from "$lib/breedbase/breeding_program";
+import {type SchemaType} from "$lib/breedbase/breeding_program";
 
 import Actions from "./actions.svelte";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
-import SortableHeader from "./sortable.svelte";
+import SortableHeader from "$lib/components/app/sortable-header.svelte";
 import { User } from "$lib/breedbase";
 
 let userRole = await User.getRole();
 
-export var columns: ColumnDef<BreedingProgramType>[] = [
+export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "rowSelect",
     header: ({ table }) =>
@@ -99,7 +99,7 @@ export var columns: ColumnDef<BreedingProgramType>[] = [
   // }
 ];
 
-if (userRole.data.user_role == 'curator'){
+if (userRole.data && userRole.data.user_role == 'curator'){
   columns.push(
     {
       id: "rowAction",

@@ -1,4 +1,4 @@
-import { fetchResult } from './result';
+import { fetchResult } from './utils';
 import { z } from 'zod';
 
 // Generic return type for functions in this module
