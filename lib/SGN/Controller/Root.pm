@@ -311,6 +311,16 @@ sub auto : Private {
                     $allowed = 1;
                     last;
                 }
+                # allow javascript requests
+                elsif ( $request_uri =~ m'^/js/') {
+                    $allowed = 1;
+                    last;
+                }
+                # allow .well-known devtools
+                if ( $request_uri =~ m'^/.well-known/') {
+                    $allowed = 1;
+                    last;
+                }
             }
 
             if (not $allowed) {
