@@ -247,12 +247,13 @@ sub auto : Private {
 
     # Allows CORS based on allowed_origins in config
     my $request_origin = $c->request->env->{HTTP_ORIGIN};
+    my $main_production_site_url = $c->get_conf("main_production_site_url");
+
     if ($request_origin){
         $c->response->headers->header( "Access-Control-Allow-Credentials" => 'true' );
         $c->response->headers->header( "Access-Control-Allow-Methods" => "POST, GET, PUT, OPTIONS" );
         $c->response->headers->header( 'Access-Control-Allow-Headers' => 'Content-Type');
 
-        my $main_production_site_url = $c->get_conf("main_production_site_url");
         my $allowed_origins = $c->config->{"allowed_origins"};
         my @allowed_origins;
         if ($allowed_origins){
@@ -302,27 +303,53 @@ sub auto : Private {
                 password => $sp_person->get_password(),
             });
         } else {
-            # If not logged in, redirect to login page
-            my @allowed_routes = ("/user/login", "/ajax/user/login", "/authenticate/check/token");
-
+            # If not logged in, check if we need to redirect
             my $allowed = 0;
-            foreach my $route (@allowed_routes) {
+
+            # allowed javascript static requests
+            if ( $request_uri =~ m'^/js/') {
+                $allowed = 1;
+                last;
+            }
+            # allow .well-known devtools static requests
+            if ( $request_uri =~ m'^/.well-known/') {
+                $allowed = 1;
+                last;
+            }
+
+            # Authentication routes that are allowed
+            my @auth_routes = (
+                "/user/login", "/ajax/user/login",
+                "/authenticate/check/token", "/brapi/v1/token",
+            );
+            foreach my $route (@auth_routes) {
                 if ( $request_uri =~ m"^$route") {
-                    $allowed = 1;
-                    last;
-                }
-                # allow javascript requests
-                elsif ( $request_uri =~ m'^/js/') {
-                    $allowed = 1;
-                    last;
-                }
-                # allow .well-known devtools
-                if ( $request_uri =~ m'^/.well-known/') {
                     $allowed = 1;
                     last;
                 }
             }
 
+            # routes needed for fixture testing
+            # potentially only run this when we're in testing mode?
+            if ($main_production_site_url eq "http://localhost:3010"){
+                my @fixture_routes = (
+                    "/ajax/accession_list/add",
+                    "/ajax/(accessions|analysis|barcode/stock|breeders|catalog|cross|filesharedump|genotype|highdimensionalphenotypes|onto|parse|pedigrees|propagation|transformation|trial|vectors)/(download|parse|store|upload|verify)",
+                    "/ajax/(genotyping_project|genotyping_protocol)/delete",
+                    "/ajax/filesharedump/(list|upload)",
+                    "/ajax/Nirs/generate_spectral_plot",
+                    "/api/drone_imagery",
+                );
+
+                foreach my $route (@fixture_routes) {
+                    if ( $request_uri =~ m"^$route") {
+                        $allowed = 1;
+                        last;
+                    }
+                }
+            }
+
+            # Final decision on whether to redirect to login
             if (not $allowed) {
                 my $redirect_url = uri( path => '/user/login', query => { goto_url => $c->req->uri->path_query });
                 $c->res->redirect( $redirect_url );
