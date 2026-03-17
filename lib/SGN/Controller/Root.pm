@@ -334,11 +334,12 @@ sub auto : Private {
             if ($main_production_site_url eq "http://localhost:3010"){
                 my @fixture_routes = (
                     "/ajax/accession_list/add",
-                    "/ajax/(accessions|analysis|barcode/stock|breeders|catalog|cross|filesharedump|genotype|highdimensionalphenotypes|onto|parse|pedigrees|propagation|transformation|trial|vectors)/(download|parse|store|upload|verify)",
+                    "/ajax/(accessions|analysis|barcode/stock|breeders|breeders/program|breeders/trial|catalog|cross|filesharedump|genotype|highdimensionalphenotypes|onto|parse|pedigrees|propagation|transformation|trial|vectors)/.*(download|parse|store|upload|verify).*",
                     "/ajax/(genotyping_project|genotyping_protocol)/delete",
                     "/ajax/filesharedump/(list|upload)",
                     "/ajax/Nirs/generate_spectral_plot",
                     "/api/drone_imagery",
+                    "/barcode/stock/download",
                 );
 
                 foreach my $route (@fixture_routes) {
