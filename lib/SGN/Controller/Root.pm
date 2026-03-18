@@ -306,7 +306,7 @@ sub auto : Private {
             # If not logged in, check if we need to redirect
             my $allowed = 0;
 
-            # allowed javascript static requests
+            # allow javascript static requests
             if ( $request_uri =~ m'^/js/') {
                 $allowed = 1;
                 last;
@@ -316,8 +316,7 @@ sub auto : Private {
                 $allowed = 1;
                 last;
             }
-
-            # Authentication routes that are allowed
+            # allow authentication routes
             my @auth_routes = (
                 "/user/login", "/ajax/user/login",
                 "/authenticate/check/token", "/brapi/v1/token",
@@ -329,26 +328,9 @@ sub auto : Private {
                 }
             }
 
-            # routes needed for fixture testing
-            # potentially only run this when we're in testing mode?
+            # allow all routes when testing
             if ($main_production_site_url eq "http://localhost:3010"){
-                my @fixture_routes = (
-                    "/ajax/accession_list/add",
-                    "/ajax/(accessions|analysis|barcode/stock|breeders|breeders/program|breeders/trial|catalog|cross|crossing_experiment|filesharedump|genotype|highdimensionalphenotypes|onto|parse|pedigrees|propagation|transformation|trial|vectors)/.*(download|parse|store|upload|verify).*",
-                    "/ajax/(genotyping_project|genotyping_protocol)/delete",
-                    "/ajax/filesharedump/(list|upload)",
-                    "/ajax/Nirs/generate_spectral_plot",
-                    "/api/drone_imagery",
-                    "/barcode/stock/download",
-                    "/breeders/download_kasp"
-                );
-
-                foreach my $route (@fixture_routes) {
-                    if ( $request_uri =~ m"^$route") {
-                        $allowed = 1;
-                        last;
-                    }
-                }
+                $allowed = 1;
             }
 
             # Final decision on whether to redirect to login
