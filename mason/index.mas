@@ -46,9 +46,13 @@ $editable_stock_props => {}
   samples in a field, store large amounts of high density genotypic information, and provide Genomic Selection related analyses
   and predictions. Best Future Forests supports the <a href="https://brapi.org/specification">BrAPI</a> standard.
 
+  <h3>What is Breedbase?</h3>
+	Breedbase is a comprehensive breeding management and analysis software. It can be used to design field layouts, collect phenotypic information using tablets, support the collection of genotyping samples in a field, store large amounts of high density genotypic information, and provide Genomic Selection related analyses and predictions. Breedbase supports the BrAPI standard.
+
   <h3>How can I learn more?</h3>
 
   See the <a href="/about">About</a> page for more information including tutorials and manuals.
+
 </div>
 
 <div class="container-fluid">
