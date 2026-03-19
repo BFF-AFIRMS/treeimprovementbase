@@ -309,21 +309,25 @@ sub auto : Private {
             # allow javascript static requests
             if ( $request_uri =~ m'^/js/') {
                 $allowed = 1;
+                no warnings 'exiting';
                 last;
             }
             # allow .well-known devtools static requests
             if ( $request_uri =~ m'^/.well-known/') {
                 $allowed = 1;
+                no warnings 'exiting';
                 last;
             }
             # allow authentication routes
             my @auth_routes = (
                 "/user/login", "/ajax/user/login",
-                "/authenticate/check/token", "/brapi/v1/token",
+                "/authenticate/check/token", "/authenticate/oidc",
+                "/brapi/v1/token",
             );
             foreach my $route (@auth_routes) {
                 if ( $request_uri =~ m"^$route") {
                     $allowed = 1;
+                    no warnings 'exiting';
                     last;
                 }
             }
