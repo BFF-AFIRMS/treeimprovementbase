@@ -48,6 +48,13 @@ export async function create({program} : {program: SchemaType}) {
   result.error = parseErrors(parsed);
   if (result.error){ return result; }
 
+  // Remove null values
+  Object.keys(parsed.data).forEach((key:string)=>{
+    if (parsed.data[key] == null){
+      delete parsed.data[key];
+    }
+  });
+
   // Post data to backend server
   const query = new URLSearchParams(parsed.data).toString();
   result = await fetchResult({

@@ -58,27 +58,29 @@ sub create_organism :Path('/ajax/svelte/organism/create') Args(0) {
             $c->stash->{rest} = { error => 'You need to be logged in and have sufficient privileges to add or edit an organism.' };
         }
 
+        if (! defined $species ){
+            die "Species is a required field.\n";
+        }
         my @species_split = split(' ', $species);
         my $genus = $species_split[0];
 
-        my $schema = $c->dbic_schema("Bio::Chado::Schema");
-
-        if (! defined $species){
-            die "Species is a required field.\n";
-        }
         # Check if organism already exists
-        my $organism_rs = $schema->resultset('Organism::Organism')->search({
-            species => $species
-        });
+        my $schema = $c->dbic_schema("Bio::Chado::Schema", 'sgn_chado');
+        my $organism_rs = $schema->resultset('Organism::Organism')->find({species => $species});
         if ($organism_rs){
             die "Species already exists in the database: $species\n";
         }
 
-        my $q = "
-        insert into public.organism (species, genus, common_name, abbreviation)
-        values (?, ?, ?, ?)";
-        my $h = $schema->storage->dbh()->prepare($q);
-        $h->execute($species, $genus, $common_name, $abbreviation);
+        # Create new organism
+        my $organism_rs = $schema->resultset("Organism::Organism")->find_or_create({
+            genus   => $genus,
+            species => $species,
+            common_name => $common_name,
+            abbreviation => $abbreviation
+        });
+        my $organism_id = $organism_rs->organism_id();
+
+        $c->stash->{rest} = { organism_id => $organism_id};
 
     } catch {
         $c->stash->{rest} = { error => $_};

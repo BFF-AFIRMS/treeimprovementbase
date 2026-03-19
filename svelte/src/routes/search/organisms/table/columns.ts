@@ -1,10 +1,11 @@
 import type { ColumnDef } from "@tanstack/table-core";
-import { createRawSnippet } from "svelte";
-import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/index.js";
+import { renderComponent } from "$lib/components/ui/data-table";
 import {type SchemaType} from "$lib/breedbase/organism";
 
 import Actions from "./actions.svelte";
-import { Checkbox } from "$lib/components/ui/checkbox/index.js";
+import Button from "$lib/components/ui/button/button.svelte";
+import { Checkbox } from "$lib/components/ui/checkbox";
+import { createRawSnippet } from "svelte";
 import SortableHeader from "$lib/components/app/sortable-header.svelte";
 import { User } from "$lib/breedbase";
 
@@ -15,11 +16,11 @@ export var columns: ColumnDef<SchemaType>[] = [
     id: "rowSelect",
     header: ({ table }) =>
       renderComponent(Checkbox, {
-        checked: table.getIsAllPageRowsSelected(),
+        checked: table.getIsAllRowsSelected(),
         indeterminate:
-          table.getIsSomePageRowsSelected() &&
-          !table.getIsAllPageRowsSelected(),
-        onCheckedChange: (value) => table.toggleAllPageRowsSelected(!!value),
+          table.getIsSomeRowsSelected() &&
+          !table.getIsAllRowsSelected(),
+        onCheckedChange: (value) => table.toggleAllRowsSelected(!!value),
         "aria-label": "Select all",
       }),
     cell: ({ row }) =>
@@ -43,6 +44,23 @@ export var columns: ColumnDef<SchemaType>[] = [
     enableColumnFilter: true
   },
   {
+    id: "Species",
+    accessorKey: "species",
+    header: ({column}) =>
+        renderComponent(SortableHeader, {
+            name: "Species",
+            onclick: column.getToggleSortingHandler(),
+        }),
+    cell: ({row}) =>
+    {
+      const cellSnippet = createRawSnippet<[]>(() => {
+        return { render: () => `<a href="/organism/${row.original.organism_id}/view">${row.original.species}</a>` };
+        });
+      return renderComponent(Button, { children: cellSnippet, variant: "outline", class: "bg-blue-200 hover:bg-blue-300 pt-0 pb-0 pl-1 pr-1 h-full"})
+    },
+    enableColumnFilter: true,
+  },
+  {
     id: "Genus",
     accessorKey: "genus",
     header: ({column}) =>
@@ -51,17 +69,6 @@ export var columns: ColumnDef<SchemaType>[] = [
             onclick: column.getToggleSortingHandler(),
         }),
     cell: ({row}) => { return row.original.genus;},
-    enableColumnFilter: true,
-  },
-  {
-    id: "Species",
-    accessorKey: "species",
-    header: ({column}) =>
-        renderComponent(SortableHeader, {
-            name: "Species",
-            onclick: column.getToggleSortingHandler(),
-        }),
-    cell: ({row}) => { return row.original.species;},
     enableColumnFilter: true,
   },
   {

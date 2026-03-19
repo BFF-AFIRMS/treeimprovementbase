@@ -15,11 +15,11 @@ export var columns: ColumnDef<SchemaType>[] = [
     id: "rowSelect",
     header: ({ table }) =>
       renderComponent(Checkbox, {
-        checked: table.getIsAllPageRowsSelected(),
+        checked: table.getIsAllRowsSelected(),
         indeterminate:
-          table.getIsSomePageRowsSelected() &&
-          !table.getIsAllPageRowsSelected(),
-        onCheckedChange: (value) => table.toggleAllPageRowsSelected(!!value),
+          table.getIsSomeRowsSelected() &&
+          !table.getIsAllRowsSelected(),
+        onCheckedChange: (value) => table.toggleAllRowsSelected(!!value),
         "aria-label": "Select all",
       }),
     cell: ({ row }) =>
@@ -79,24 +79,6 @@ export var columns: ColumnDef<SchemaType>[] = [
     enableColumnFilter: true,
     enableSorting: true,
   },
-  // {
-  //   id: "Abbreviation",
-  //   accessorKey: "abbreviation",
-  //   // header: () => {
-  //   //   return renderSnippet(
-  //   //     createRawSnippet(() => ({
-  //   //       render: () => `<div class="text-center">Abbreviation</div>`,
-  //   //     })
-  //   //   ));
-  //   // },
-  //   header: ({column}) =>
-  //       renderComponent(SortableHeader, {
-  //           name: "Abbreviation",
-  //           onclick: column.getToggleSortingHandler(),
-  //       }),
-  //   enableColumnFilter: true,
-  //   enableSorting: true,
-  // }
 ];
 
 if (userRole.data && userRole.data.user_role == 'curator'){
