@@ -1,3 +1,5 @@
 sgn_local.conf
 static/_app
 .env
+static/svelte
+static/nuxt
