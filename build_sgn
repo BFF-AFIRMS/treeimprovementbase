@@ -36,9 +36,20 @@ npm install
 npm run build
 cd ../
 
+echo "---------------------------------------------------------"
+echo "Building nuxt app"
+
+cd ${script_dir}/nuxt
+
+npm install
+npm run generate
+cd ../
+
 echo -e "---------------------------------------------------------"
 echo -e "Symlinking build"
 ln -f -s ../svelte/build static/svelte
+ln -f -s ../nuxt/.output/public/ static/nuxt
 
 echo -e "Symlinking sgn"
 ln -f -s ../../treeimprovementbase/svelte/build ../sgn/mason/svelte
+ln -f -s ../../treeimprovementbase/nuxt/.output/public ../sgn/mason/nuxt

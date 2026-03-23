@@ -3,11 +3,11 @@ use utf8;
 </%once>
 
 <%perl>
-  my $template = $c->state;
+  my $path = $c->_env->{PATH_INFO};
 </%perl>
 
 
-% if ( rindex($template, "/svelte/", 0) == 0) {
+% if ( $path =~ m"^/(svelte|nuxt)/") {
 
 % $m->call_next;
 
