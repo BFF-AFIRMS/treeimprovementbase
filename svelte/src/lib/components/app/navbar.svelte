@@ -10,7 +10,7 @@
 <!-- <NavigationMenu.Root viewport={isMobile.current}> -->
 <div class="min-h-{navbarHeight} w-full bg-mgray-100 button-box-shadow mb-8">
   <NavigationMenu.Root viewport={false} class="h-full">
-    <a  href={resolve("/")}><img src={asset("/img/BFF-AFIRMS_logo_LoRes.png")} alt="BFF-AFIRMS logo" class="ml-4 mr-4 pt-1 pb-2 h-15"></a>
+    <a href="/"><img src={asset("/img/BFF-AFIRMS_logo_LoRes.png")} alt="BFF-AFIRMS logo" class="ml-4 mr-4 pt-1 pb-2 h-15"></a>
 
     <NavigationMenu.List class="flex-wrap h-{navbarHeight}">
 
