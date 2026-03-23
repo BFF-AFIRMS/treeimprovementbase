@@ -186,6 +186,13 @@ h1,h2,h3,h4,h5,h6 {
     font-family:      var(--font-family);
 }
 
+#wrapper {
+    min-height: 80vh;
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
 
 /*
 -------------------------------------------------------------------------------
