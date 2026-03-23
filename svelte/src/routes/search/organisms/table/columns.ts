@@ -35,6 +35,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "ID",
     accessorKey: "organism_id",
+    accessorFn: (row) => { return row.organism_id == null ? '' : row.organism_id},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "ID",
@@ -46,6 +47,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Species",
     accessorKey: "species",
+    accessorFn: (row) => { return row.species == null ? '' : row.species},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Species",
@@ -63,6 +65,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Genus",
     accessorKey: "genus",
+    accessorFn: (row) => { return row.genus == null ? '' : row.genus},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Genus",
@@ -74,6 +77,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Abbreviation",
     accessorKey: "abbreviation",
+    accessorFn: (row) => { return row.abbreviation == null ? '' : row.abbreviation},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Abbreviation",
@@ -85,12 +89,13 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Common Name",
     accessorKey: "common_name",
+    accessorFn: (row) => { return row.common_name == null ? '' : row.common_name},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Common Name",
             onclick: column.getToggleSortingHandler(),
         }),
-    cell: ({row}) => { return row.original.common_name;},
+    cell: ({row}) => { return row.original.common_name },
     enableColumnFilter: true,
   },
 ];

@@ -34,6 +34,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "ID",
     accessorKey: "project_id",
+    accessorFn: (row) => { return row.project_id == null ? '' : row.project_id},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "ID",
@@ -45,6 +46,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Name",
     accessorKey: "name",
+    accessorFn: (row) => { return row.name == null ? '' : row.name},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Name",
@@ -63,6 +65,7 @@ export var columns: ColumnDef<SchemaType>[] = [
   {
     id: "Description",
     accessorKey: "description",
+    accessorFn: (row) => { return row.description == null ? '' : row.description},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Description",
