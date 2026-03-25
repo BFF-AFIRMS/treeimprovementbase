@@ -285,7 +285,7 @@ sub _authenticate_user {
 	my $expired;
 	my $wildcard = 'any';
 
-        print STDERR "AUTHENTICATING USER status: $status\n";    
+        print STDERR "AUTHENTICATING USER status: $status\n";
 	my %server_permission;
     my $rc = eval{
 	print STDERR "SERVER PERMISSION CHECK...\n";
@@ -313,26 +313,26 @@ sub _authenticate_user {
 
 	# If our brapi config is set to authenticate or the controller calling this asks for forcing of
     # authentication or serverinfo call method request auth, we authenticate.
-    my $login = CXGN::Login->new($c->dbc->dbh); 
+    my $login = CXGN::Login->new($c->dbc->dbh);
     if ($c->config->{brapi_require_login} == 1 || $force_authenticate || !exists($server_permission{$wildcard})){
 	print STDERR "REQUIRE LOGIN... logging in user\n";
 	print STDERR "SESSION TOKEN: ".$c->stash->{session_token}."\n";
-	if ($c->stash->{session_token}) { 
+	if ($c->stash->{session_token}) {
 	    ($user_id, $user_type, $user_pref, $expired) = $login->query_from_cookie($c->stash->{session_token});
 	    print STDERR "LOGGING IN USER: ".$user_id." : ".$user_type." : ".$expired;
 	}
-	else { 
+	else {
 	    print STDERR "GET USER ID FROM LOGIN...\n";
 	    if ($c->user) {
 		$user_id = $c->user->get_object->get_sp_person_id();
 		($user_type) = $c->user->get_object->get_user_type();
-	   
+
 		my $cookie_string = $login->get_login_cookie();
 		print STDERR "USER ID: $user_id, EXPIRED: $expired, USER TYPE: $user_type\n";
 		$c->stash->{session_token} = $login->get_login_cookie();
 	    }
 	}
-          
+
         if (!$user_id || $expired || !$user_type || (!exists($server_permission{$user_type}) && !exists($server_permission{$wildcard}))) {
             my $brapi_package_result = CXGN::BrAPI::JSONResponse->return_error($status, 'You must login and have permission to access this BrAPI call.');
 
@@ -3984,7 +3984,7 @@ sub observations_PUT {
 }
 
 sub observations_GET {
-	my $self = shift; 
+	my $self = shift;
 	my $c = shift;
     my $auth = _authenticate_user($c);
     my $clean_inputs = $c->stash->{clean_inputs};
@@ -4539,12 +4539,12 @@ sub images_GET {
 sub images_POST {
     my $self = shift;
     my $c = shift;
-    
+
     # Check user auth. This matches observations PUT observations endpoint authorization.
     # No specific roles are check, just that the user has an account.
     my $force_authenticate = $c->config->{brapi_images_require_login};
     my ($auth_success, $user_id, $user_type, $user_pref, $expired) = _authenticate_user($c, $force_authenticate);
-    
+
     my $clean_inputs = $c->stash->{clean_inputs};
     my @all_images;
     foreach my $image (values %{$clean_inputs}) {
@@ -4557,7 +4557,7 @@ sub images_POST {
     my $brapi_package_result = $brapi_module->image_metadata_store(\@all_images, $image_dir, $user_id, $user_type, $c->config->{main_production_site_url});
     my $status = $brapi_package_result->{status};
     my $http_status_code = _get_http_status_code($status);
-    
+
     _standard_response_construction($c, $brapi_package_result, $http_status_code);
 }
 
@@ -4613,12 +4613,12 @@ sub image_content_store :  Chained('images_by_id') PathPart('imagecontent') Args
 sub image_content_store_PUT {
     my $self = shift;
     my $c = shift;
-    
+
     # Check user auth. This matches observations PUT observations endpoint authorization.
     # No specific roles are check, just that the user has an account.
     my $force_authenticate = $c->config->{brapi_images_require_login};
     my ($auth_success, $user_id, $user_type, $user_pref, $expired) = _authenticate_user($c, $force_authenticate);
-    
+
     my $clean_inputs = $c->stash->{clean_inputs};
     print STDERR Dumper($clean_inputs);print Dumper $c->req->body();
     my $brapi = $self->brapi_module;
