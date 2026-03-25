@@ -183,6 +183,18 @@
   @apply border-mgray-400 mt-1 mb-1;
 }
 
+@utility well {
+  @apply m-8 bg-mgray-100 rounded p-6;
+  box-shadow: var(--button-box-shadow);
+  border: 1px solid var(--color-mgray-500);
+}
+
+@utility well-inner {
+  @apply bg-white rounded p-6 mt-4 mb-0;
+  box-shadow: var(--button-box-shadow);
+  border: 1px solid var(--color-mgray-500);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
