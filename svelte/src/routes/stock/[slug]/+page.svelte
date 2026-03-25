@@ -8,7 +8,7 @@
     import * as Table from "$lib/components/ui/table";
 
     let disabled = $state(true);
-    
+
 </script>
 
 <h1>{data.result.germplasmName}</h1>
@@ -29,7 +29,7 @@
                 <div class="well-inner">
 
                     <div class="w-[50%]">
-  
+
                     <Button class="float-left" variant="outline" onclick={() => {disabled=!disabled}}>Edit</Button>
                     {#if !disabled}
                         <Button class="float-left ml-4">Submit</Button>
@@ -53,7 +53,7 @@
                             <Table.Row>
                                 <Table.Cell class="font-medium">Description:</Table.Cell>
                                 <Table.Cell><Input type="text" disabled={disabled}/></Table.Cell>
-                            </Table.Row>                            
+                            </Table.Row>
                         </Table.Body>
                     </Table.Root>
                     </form>

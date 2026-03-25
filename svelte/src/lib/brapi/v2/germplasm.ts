@@ -30,10 +30,10 @@ export const Schema = z.object({
     seedSourceDescription: z.string(),
     species: z.string(),
     speciesAuthority: z.string().nullable(),
-    // storageTypes: 
+    // storageTypes:
     subtaxa: z.string().nullable(),
     subtaxaAuthority: z.string().nullable(),
-    // synonyms: 
+    // synonyms:
     // taxonIds
 });
 
@@ -64,5 +64,5 @@ export async function detail({germplasmDbId, params} : {germplasmDbId: Number, p
   }
 
   return result;
-    
+
 }
