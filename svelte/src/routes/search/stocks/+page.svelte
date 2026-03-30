@@ -5,40 +5,39 @@
   import {Button, buttonVariants} from "$lib/components/ui/button/index.js";
   import { cn } from "$lib/utils.js";
   import { columns } from "./table/columns.js";
-  import { create as createBreedingProgram, Schema as BreedingProgram } from "$lib/brapi/v2/programs";
+  import { Schema as Germplasm, create as createGermplasm } from "$lib/brapi/v2/germplasm";
   import DataTable from "$lib/components/app/data-table.svelte";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Field from "$lib/components/ui/field/index.js";
   import { getData, fetchData } from "./table/data.svelte.js";
   import { Input } from "$lib/components/ui/input/index.js";
-	import type { PageProps } from './$types';
+  import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+  let { data }: PageProps = $props();
 
   // State
-  let createData = $state(BreedingProgram.parse({}));
+  let createData = $state(Germplasm.parse({}));
   let createErrorMessage: string | null = $state(null);
   let createSuccessMessage: string | null = $state(null);
   let createDialogOpen: boolean = $state(false);
 
   // Table Display Options
-  let caption = "List of breeding programs.";
+  let caption = "List of germplasm.";
   let pageSize = 100;
 
-  async function submitCreateBreedingProgram(){
-    console.log("submitCreateBreedingProgram:", createData);
-    let result = await createBreedingProgram({program: createData});
+  async function submitCreateGermplasm(){
+    let result = await createGermplasm({germplasm: createData});
     createErrorMessage = result.error;
     createSuccessMessage = result.success;
   }
 
 </script>
 
-<!-- Button to add a new program -->
-{#snippet NewProgramButton()}
+<!-- Button to add a new germplasm -->
+{#snippet NewGermplasmButton()}
   {#if data.user_role == 'curator' }
-  <Button slot="buttons" size="sm" class="btn-primary" name="new_breeding_program_link" id="new_breeding_program_link" onclick={() => {createDialogOpen = true}}>
-    Add New Program
+  <Button slot="buttons" size="sm" class="btn-primary" onclick={() => {createDialogOpen = true}}>
+    Add New Germplasm
   </Button>
   {/if}
 {/snippet}
@@ -46,18 +45,18 @@
 <!-- Table with 'skeleton' rows to indicate data is still loading -->
 {#snippet SkeletonTable()}
   <div class="inline-block w-11/12 h-80">
-    <DataTable data={[]} {caption} {columns} refreshTable={fetchData} skeleton={true} buttons={NewProgramButton}/>
+    <DataTable data={[]} {caption} {columns} refreshTable={fetchData} skeleton={true} buttons={NewGermplasmButton}/>
   </div>
 {/snippet}
 
 <!-- Table with empty rows that is a bit smaller -->
 {#snippet EmptyTable()}
   <div class="inline-block w-11/12 h-80">
-    <DataTable data={[]} {caption} {columns} refreshTable={fetchData} skeleton={false} buttons={NewProgramButton}/>
+    <DataTable data={[]} {caption} {columns} refreshTable={fetchData} skeleton={false} buttons={NewGermplasmButton}/>
   </div>
 {/snippet}
 
-<h1>Breeding Programs</h1>
+<h1>Germplasm</h1>
 
 <hr class="mt-4 mb-8">
 
@@ -72,7 +71,7 @@
   {:then response}
 
     {#if response.error}
-      <Alert title="Error Fetching Programs" description={response.error} open={true}/>
+      <Alert title="Error Fetching Germplasm" description={response.error} open={true}/>
     {/if}
 
     {#if response.data.result.length == 0}
@@ -86,7 +85,7 @@
           {pageSize}
           {columns}
           refreshTable={fetchData}
-          buttons={NewProgramButton}
+          buttons={NewGermplasmButton}
           skeleton={false}
         />
       </div>
@@ -94,34 +93,35 @@
 
   <!-- Uh oh, unhandled errors -->
   {:catch error}
-      <Alert title="Error Fetching Programs" description={"An unhandled error occurred. "  + error}/>
+      <Alert title="Error Fetching Germplasm" description={"An unhandled error occurred. "  + error}/>
       {@render EmptyTable()}
   {/await}
 </div>
 
-<!-- Dialog box to submit a breeding program -->
+
+<!-- Dialog box to submit a germplasm -->
 <Dialog.Root open={createDialogOpen} onOpenChange={() => createDialogOpen = !createDialogOpen}>
   <form method="POST">
-    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateBreedingProgram() : null}>
+    <Dialog.Content class="sm:min-w-[425px] max-w-[425px] md:max-w-[720px]" onkeyup = {(e) => e.key == 'Enter' ? submitCreateGermplasm() : null}>
       <Dialog.Header>
         <Dialog.Title id="addBreedingProgramDialog">Store Breeding Program Details</Dialog.Title>
         <Dialog.Description>
-          Add a new breeding program to the database.
+          Add a new germplasm to the database.
         </Dialog.Description>
       </Dialog.Header>
       <Field.Field>
-        <Field.Label for="store_breeding_program_name">Name</Field.Label>
-        <Input bind:value={createData.programName} name="store_breeding_program_name" id="store_breeding_program_name" type="text" required/>
+        <Field.Label>Name</Field.Label>
+        <Input bind:value={createData.germplasmName} type="text" required/>
       </Field.Field>
       <Field.Field>
-        <Field.Label for="store_breeding_program_desc">Description</Field.Label>
-        <Input bind:value={createData.objective} name="store_breeding_program_desc" id="store_breeding_program_desc" type="text" required/>
+        <Field.Label>Species</Field.Label>
+        <Input bind:value={createData.species} type="text" required/>
       </Field.Field>
       <Dialog.Footer class="inline-block text-right">
         <Dialog.Close type="button" onclick={() => createDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
           Close
         </Dialog.Close>
-        <Button type="submit" onclick={submitCreateBreedingProgram} name="store_breeding_program_submit" id="store_breeding_program_submit">Store Breeding Program Details</Button>
+        <Button type="submit" onclick={submitCreateGermplasm} name="store_breeding_program_submit" id="store_breeding_program_submit">Store Breeding Program Details</Button>
       </Dialog.Footer>
     </Dialog.Content>
   </form>

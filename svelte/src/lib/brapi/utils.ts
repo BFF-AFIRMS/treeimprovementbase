@@ -9,13 +9,16 @@ export const ResultSchema = z.object({
 }).default({});
 export type ResultType = z.infer<typeof ResultSchema>;
 
-export async function fetchResult({ url, method, errorMsg, successMsg }: {url: string, method: string, errorMsg: string, successMsg: string}) {
+export async function fetchResult({ baseUrl, url, method, errorMsg, successMsg, body }: {baseUrl?: string, url: string, method: string, errorMsg: string, successMsg: string, body?: Object}) {
 
     let result = ResultSchema.parse({});
+    if (baseUrl == null){
+      baseUrl = brapi_url;
+    }
 
     let response: Response;
     try {
-        response = await fetch(`${brapi_url}${url}`, {method: method, credentials: "include"} );
+        response = await fetch(`${baseUrl}${url}`, {method: method, credentials: "include", body: body} );
     } catch(error) {
         result.error = error.message;
         return result;

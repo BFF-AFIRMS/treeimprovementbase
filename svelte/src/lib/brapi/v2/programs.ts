@@ -1,92 +1,144 @@
+import { fetchResult, parseErrors, ResultSchema, type ResultType } from '../utils';
+import { PUBLIC_BREEDBASE_URL } from '$env/static/public';
 import * as z from "zod";
-import { error } from '@sveltejs/kit';
-import { getCookies } from "$lib/cookies/cookies.js";
-import { brapi_url } from "../index.ts";
 
-// This type is used to define the shape of our data.
-export const ProgramSchema = z.object({
-    abbreviation: z.string().nullable() || '',
+// ----------------------------------------------------------------------------
+// Schemas
+
+// Default Breeding Program schema
+export const Schema = z.object({
+    abbreviation: z.string().nullable().default(null),
     additionalInfo: z.object({
-        description: z.string().nullable().optional() || '',
-    }).nullable(),
-    objective: z.string().nullable(),
-    programDbId:  z.string(),
-    programName:  z.string(),
+        description: z.string().nullable().default(null),
+    }).optional(),
+    objective: z.string().nullable().default(null),
+    programDbId:  z.string().default(null),
+    programName:  z.string().default(null),
+}).default({});
+export type SchemaType = z.infer<typeof Schema>;
+
+
+// Required schema to create a breeding program
+export const CreateSchema = z.object({
+    programName: z.string({ error: (iss) => iss.input == null ? "programName is a required field." : `programName is invalid: ${iss.input}` }),
+    objective: z.string({ error: (iss) => iss.input == null ? "objective is a required field." : `objective is invalid: ${iss.input}` }),
+    externalReferences: z.array(z.string()).nullable().default([])
 });
+export type CreateType = z.infer<typeof CreateSchema>;
 
-export type ProgramType = z.infer<typeof ProgramSchema>;
 
+// Required schema to edit a breeding program
+export const EditSchema = z.object({
+    programDbId: z.coerce.number({ error: (iss) => iss.input == null ? "programDbId is a required field." : `programDbId is invalid: ${iss.input}` }).int(),
+    programName: z.string({ error: (iss) => iss.input == null ? "programName is a required field." : `programName is invalid: ${iss.input}` }),
+    objective: z.string({ error: (iss) => iss.input == null ? "objective is a required field." : `objective is invalid: ${iss.input}` }),
+});
+export type EditType = z.infer<typeof EditSchema>;
 
-/** `GET /programs`
- * @param  {Object} params Parameters to provide to the call
- * @return {ProgramSchema[]}
- */
-export async function programs (params?: Object){
+// Required schema to remove a breeding program
+export const RemoveSchema = z.object({
+    programDbId: z.coerce.number({ error: (iss) => iss.input == null ? "programDbId is a required field." : `programDbId is invalid: ${iss.input}` }).int(),
+});
+export type RemoveType = z.infer<typeof RemoveSchema>;
 
-    let error: string | null = null;
-    let result = { result: {data: [], error: error } };
+// ----------------------------------------------------------------------------
+// Actions
 
-    let url = `${brapi_url}/programs`;
+// Get breeding program(s)
+export async function get({params} : {params?: Object}): Promise<ResultType> {
+    let url = `/programs`;
     if (params){
       let query = new URLSearchParams(params).toString();
       url += `?${query}`;
     }
+    let result = await fetchResult({
+        url: url,
+        method: 'GET',
+        errorMsg: 'Failed to fetch programs search.',
+        successMsg: 'Succeeded in fetching programs search.'
+    });
 
-    let cookies = getCookies();
-    let headers : Record<string, string> = {};
-    if ('sgn_session_id' in cookies){
-      headers['Authorization'] = `Bearer ${cookies.sgn_session_id}`;
+    if (result.data && result.data.result){
+        result.data.result = result.data.result.data.map( (record) => Schema.parse( record ));
     }
 
-    // Testing awaiting promises
-    // await new Promise(r => setTimeout(r, 2000));
-
-    let response: Response;
-
-    try {
-      response = await fetch(url, {headers: headers});
-    } catch(error) {
-      // TBD: Get error.cause to pass along correctly;
-      result.result.error = error.message;
-      return result;
-    }
-
-    // If fetch failed, return with error
-    if (response.status != 200){
-      result.result.error = `${response.statusText} (${response.status})`;
-      return result
-    }
-
-    result = await response.json();
-
-    // Otherwise, parse the data
-    let data = result.result.data;
-    if (data.length > 0) {
-      result.result.data = data.map((record: Object) => ProgramSchema.parse(record))
-    } else {
-      result.result.data = [];
-    }
-    return result
+    return result;
 }
 
-/** `GET /programs/{programDbId}`
- * @param  {Object} params Parameters to provide to the call
- * @param  {String} programDbId programDbId
- * @return {ProgramSchema}
- */
-export async function programs_detail (programDbId: Number, params?: Object){
-    let url = `${brapi_url}/programs/${programDbId}`;
-    if (params){
-      let query = new URLSearchParams(params).toString();
-      url += `?${query}`;
-    }
 
-    const response: Response = await fetch(url);
-    const data = await response.json();
-    const pagination = data.metadata.pagination;
-    if (Object.keys(data.result).length > 0) {
-      return ProgramSchema.parse(data.result);
-    } else {
-      error(404, { message: 'Not found' });
-    }
+// Create new breeding program
+export async function create({program} : {program: SchemaType}) {
+
+  let result = ResultSchema.parse({});
+  // Input validation
+  let parsed = CreateSchema.safeParse(program);
+  result.error = parseErrors(parsed);
+  if (result.error){ return result; }
+  if (!parsed.data){
+    result.error = "No breeding program data was given.";
+    return result;
+  }
+
+  // Post data to backend server
+  result = await fetchResult({
+    url: `/programs`,
+    method: 'POST',
+    body: JSON.stringify([parsed.data]),
+    errorMsg: 'Failed to create breeding program.',
+    successMsg: 'Succeeded in creating breeding program.'
+  });
+
+  return result;
+}
+
+
+// Edit a breeding program details
+export async function edit({program} : {program: SchemaType}) {
+  let result = ResultSchema.parse({});
+
+  // Input validation
+  let parsed = EditSchema.safeParse(program);
+  result.error = parseErrors(parsed);
+  if (result.error){ return result; }
+  if (!parsed.data){
+    result.error = "No breeding program data was given.";
+    return result;
+  }
+
+  // Post data to backend server
+  result = await fetchResult({
+    url: `/programs/${parsed.data.programDbId}`,
+    method: 'PUT',
+    body: JSON.stringify(parsed.data),
+    errorMsg: 'Failed to edit breeding program.',
+    successMsg: 'Succeeded in editing breeding program.'
+  });
+
+  return result;
+}
+
+
+// Remove a breeding program
+export async function remove({program} : {program: SchemaType}) {
+  let result = ResultSchema.parse({});
+
+  // Input validation
+  let parsed = RemoveSchema.safeParse(program);
+  result.error = parseErrors(parsed);
+  if (result.error){ return result; }
+  if (!parsed.data){
+    result.error = "No breeding program data was given.";
+    return result;
+  }
+
+  // Post data to backend server
+  result = await fetchResult({
+    baseUrl: PUBLIC_BREEDBASE_URL,
+    url: `/breeders/program/delete/${parsed.data.programDbId}`,
+    method: 'POST',
+    errorMsg: 'Failed to remove breeding program.',
+    successMsg: 'Succeeded in removing breeding program.'
+  });
+
+  return result;
 }

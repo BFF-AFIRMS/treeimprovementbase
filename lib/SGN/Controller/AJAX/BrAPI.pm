@@ -145,7 +145,7 @@ sub brapi : Chained('/') PathPart('brapi') CaptureArgs(1) {
         my $allowed_origins = $c->config->{"allowed_origins"};
         my @allowed_origins;
         if ($allowed_origins){
-            @allowed_origins = split(' ', $allowed_origins);
+            @allowed_origins = split(',', $allowed_origins);
         }
         if ( grep( /^$request_origin$/, @allowed_origins ) ) {
             $c->response->headers->header( "Access-Control-Allow-Origin" => $request_origin );

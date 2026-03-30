@@ -10,7 +10,7 @@
   import * as Field from "$lib/components/ui/field/index.js";
   import EllipsisIcon from "@lucide/svelte/icons/ellipsis";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { edit as editBreedingProgram, remove as deleteBreedingProgram, Schema as BreedingProgram } from "$lib/breedbase/breeding_program";
+  import {edit as editBreedingProgram, Schema as BreedingProgram, remove as deleteBreedingProgram}  from "$lib/brapi/v2/programs";
 
   // States
   let deleteDialogOpen = $state(false);
@@ -22,8 +22,8 @@
   let editSuccessMessage: string | null = $state(null);
 
   // Props
-  let { project_id, name, description }: { project_id: Number, name: string, description: string  } = $props();
-  let program = $derived(BreedingProgram.parse({project_id: project_id, name: name, description: description}));
+  let { programDbId, programName, objective }: { programDbId: Number, programName: string, objective: string  } = $props();
+  let program = $derived(BreedingProgram.parse({programDbId: programDbId, programName: programName, objective: objective}));
 
   async function submitDeleteProgram(){
     let result = await deleteBreedingProgram({program: program});
@@ -64,7 +64,7 @@
     <Dialog.Header>
       <Dialog.Title>Delete Breeding Program</Dialog.Title>
       <Dialog.Description>
-        Delete breeding program {name}? The associated trials will not be deleted, but be listed under 'Other'
+        Delete breeding program {programName}? The associated trials will not be deleted, but be listed under 'Other'
       </Dialog.Description>
     </Dialog.Header>
     <Dialog.Footer class="inline-block text-right">
@@ -103,11 +103,11 @@
       </Dialog.Header>
       <Field.Field>
         <Field.Label>Name</Field.Label>
-        <Input bind:value={name} type="text" required/>
+        <Input bind:value={programName} type="text" required/>
       </Field.Field>
       <Field.Field>
         <Field.Label>Description</Field.Label>
-        <Input bind:value={description} type="text" required/>
+        <Input bind:value={objective} type="text" required/>
       </Field.Field>
       <Dialog.Footer class="inline-block text-right">
         <Dialog.Close type="button" onclick={() => editDialogOpen = false} class={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}>
@@ -122,7 +122,7 @@
 <!-- Alerts to indicate success/error of editing a breeding program -->
 <Alert
   title="Error Editing Breeding Program"
-  descriptionription={editErrorMessage}
+  description={editErrorMessage}
   onOpenChange={() => {editErrorMessage = null}}
   open={editErrorMessage}
 />

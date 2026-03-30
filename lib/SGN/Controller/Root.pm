@@ -257,7 +257,7 @@ sub auto : Private {
         my $allowed_origins = $c->config->{"allowed_origins"};
         my @allowed_origins;
         if ($allowed_origins){
-            @allowed_origins = split(' ', $allowed_origins);
+            @allowed_origins = split(',', $allowed_origins);
         }
         if ( grep( /^$request_origin$/, @allowed_origins ) ) {
             $c->response->headers->header( "Access-Control-Allow-Origin" => $request_origin );
@@ -266,6 +266,10 @@ sub auto : Private {
 
     my $request_uri = $c->request->env->{REQUEST_URI};
 
+    # Handle CORS pre-flight OPTIONS
+    if ($c->request->method eq "OPTIONS"){
+        return 1;
+    }
     # gluecode for logins
     #
     unless( $c->config->{'disable_login'} ) {

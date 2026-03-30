@@ -89,7 +89,7 @@
             <li>
               <NavigationMenu.Link href={resolve("/breeders/manage_programs")} class="nav-menu-link">Breeding Programs</NavigationMenu.Link>
               <NavigationMenu.Link href={resolve("/search/organisms")} class="nav-menu-link">Organisms</NavigationMenu.Link>
-              <NavigationMenu.Link href={resolve("/stock/41784")} class="nav-menu-link">Stock</NavigationMenu.Link>
+              <NavigationMenu.Link href={resolve("/stock?id=41784")} class="nav-menu-link">Stock</NavigationMenu.Link>
             </li>
           </ul>
         </NavigationMenu.Content>

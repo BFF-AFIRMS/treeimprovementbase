@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/table-core";
 import { createRawSnippet } from "svelte";
 import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/index.js";
-import {type SchemaType} from "$lib/breedbase/breeding_program";
+import {type SchemaType} from "$lib/brapi/v2/programs";
 
 import Actions from "./actions.svelte";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
@@ -33,8 +33,8 @@ export var columns: ColumnDef<SchemaType>[] = [
   },
   {
     id: "ID",
-    accessorKey: "project_id",
-    accessorFn: (row) => { return row.project_id == null ? '' : row.project_id},
+    accessorKey: "programDbId",
+    accessorFn: (row) => { return row.programDbId == null ? '' : row.programDbId},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "ID",
@@ -45,8 +45,8 @@ export var columns: ColumnDef<SchemaType>[] = [
   },
   {
     id: "Name",
-    accessorKey: "name",
-    accessorFn: (row) => { return row.name == null ? '' : row.name},
+    accessorKey: "programName",
+    accessorFn: (row) => { return row.programName == null ? '' : row.programName},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Name",
@@ -55,7 +55,7 @@ export var columns: ColumnDef<SchemaType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="font-medium">${row.original.name}</div>`,
+          render: () => `<div class="font-medium">${row.original.programName}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
@@ -64,8 +64,8 @@ export var columns: ColumnDef<SchemaType>[] = [
   },
   {
     id: "Description",
-    accessorKey: "description",
-    accessorFn: (row) => { return row.description == null ? '' : row.description},
+    accessorKey: "objective",
+    accessorFn: (row) => { return row.objective == null ? '' : row.objective},
     header: ({column}) =>
         renderComponent(SortableHeader, {
             name: "Description",
@@ -74,7 +74,7 @@ export var columns: ColumnDef<SchemaType>[] = [
     cell: ({row}) => {
       const cellSnippet = createRawSnippet<[string]>(() => {
         return {
-          render: () => `<div class="text-left whitespace-normal sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-full">${row.original.description}</div>`,
+          render: () => `<div class="text-left whitespace-normal sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-full">${row.original.objective}</div>`,
         };
         });
       return renderSnippet(cellSnippet);
@@ -89,7 +89,11 @@ if (userRole.data && userRole.data.user_role == 'curator'){
     {
       id: "rowAction",
       cell: ({ row }) => {
-        return renderComponent(Actions, { project_id: row.original.project_id, name: row.original.name, description: row.original.description });
+        return renderComponent(Actions, {
+          programDbId: row.original.programDbId,
+          programName: row.original.programName,
+          objective: row.original.objective,
+      });
       },
       enableColumnFilter: false,
     },
