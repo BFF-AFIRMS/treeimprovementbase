@@ -11,27 +11,27 @@
     import { page } from '$app/state';
     import * as Table from "$lib/components/ui/table";
 
-    let disabled = $state(true);
+    // let disabled = $state(true);
 
-    let result: Promise<ResultType>;
-    let attributes: Promise<ResultType>;
-    let mounted = $state(false);
+    // let result = $state();
+    // let attributes = $state();
+    // let mounted = $state(false);
 
-    // Fetch data on mount
-    onMount(async () => {
-        let id = page.url.searchParams.get('id');
-        if (id == null ){
-            window.location.replace(resolve('/error/404'));
-        } else {
-            result = detail({germplasmDbId: Number(id)});
-            attributes = attributeValuesSearch({germplasmDbId: Number(id)});
-            mounted = true;
-        }
-	});
+    // // Fetch data on mount
+    // onMount(async () => {
+    //     let id = page.url.searchParams.get('id');
+    //     if (id == null ){
+    //         window.location.replace(resolve('/error/404'));
+    //     } else {
+    //         result = detail({germplasmDbId: Number(id)});
+    //         attributes = attributeValuesSearch({germplasmDbId: Number(id)});
+    //         mounted = true;
+    //     }
+	// });
 
 </script>
 
-{#if mounted}
+<!-- {#if mounted}
 
     {#await result}
     {:then response}
@@ -92,4 +92,6 @@
     {:catch error}
     Error {error}
     {/await}
-{/if}
+{:else}
+   <p>Not mounted</p>
+{/if} -->
